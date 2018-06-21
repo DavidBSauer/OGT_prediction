@@ -1,0 +1,4 @@
+tRNAscan-SE	tRNAscan-SE
+Genemark	/../../External_programs/genemark_suite_linux_64/gmsuite/gmsn.pl
+Barrnap	$HOME/barrnap-0.8/bin/barrnap
+bedtools	bedtools
