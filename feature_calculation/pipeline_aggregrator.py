@@ -2,7 +2,7 @@ from sys import argv
 import logging
 import csv
 import multiprocessing as mp
-import os
+import random
 import genomic
 import tRNA
 import protein
@@ -35,18 +35,8 @@ infile.close()
 logging.info("found "+str(len(genomes.keys()))+" genomes")
 
 #sort the genomes by file size to optimize parallelization
-logging.info('sorting genomes by reverse file-size order to improve parallelism')
-def file_checksum((genome_file,species)):
-	return ((genome_file,species),int(os.stat('./genomes/'+species+'/'+genome_file).st_size))
-to_analyze = []
-for x in genomes:
-	to_analyze.append((x,genomes[x]))	
-p = mp.Pool()
-results = p.map(file_checksum, to_analyze)
-p.close()
-results = {x[0]:x[1] for x in results}
-sortedgenomes = [x[0] for x in sorted(results.items(),key=operator.itemgetter(1))]
-sortedgenomes.reverse() #largest to smallest for most efficient parallelization, comment out for trouble-shooting
+to_analyze = [(x,genomes[x]) for x in genomes.keys()]
+random.shuffle(to_analyze)
 
 #make folders for output
 if not(os.path.isdir('./output')):	
@@ -120,7 +110,7 @@ def features_per_genome((genome_file,species)):
 
 #calculate features in parallel
 p = mp.Pool()
-results = p.map(features_per_genome, sortedgenomes)
+results = p.map(features_per_genome, to_analyze)
 
 results = {x[0]:x[1] for x in results}
 
