@@ -111,6 +111,7 @@ def features_per_genome((genome_file,species)):
 #calculate features in parallel
 p = mp.Pool()
 results = p.map(features_per_genome, to_analyze)
+p.close()
 
 results = {x[0]:x[1] for x in results}
 
