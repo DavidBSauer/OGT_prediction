@@ -13,7 +13,7 @@ echo "installing barrnap"
 cd $HOME
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar zxvf 0.9.tar.gz
-echo "PATH=$PATH:$HOME/barrnap-0.8/bin" >> .bashrc
+echo "PATH=$PATH:$HOME/barrnap-0.9/bin" >> .bashrc
 
 #install python
 echo "installing python and necessary python packages"
