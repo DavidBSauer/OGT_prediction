@@ -11,8 +11,8 @@ sudo apt-get -y install trnascan-se
 #install barrnap-0.8
 echo "installing barrnap"
 cd $HOME
-wget https://github.com/tseemann/barrnap/archive/0.8.tar.gz
-tar zxvf 0.8.tar.gz
+wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
+tar zxvf 0.9.tar.gz
 echo "PATH=$PATH:$HOME/barrnap-0.8/bin" >> .bashrc
 
 #install python
