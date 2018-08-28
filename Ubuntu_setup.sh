@@ -5,8 +5,9 @@
 #install tRNAscan-SE 
 echo "installing tRNAscan"
 #sudo apt-add-repository -y "deb http://http.us.debian.org/debian sid main non-free"
-sudo apt-get -y update
-sudo apt-get -y install trnascan-se
+#sudo apt-get -y update
+#sudo apt-get -y install trnascan-se
+##install tRNAscan-SE 2.0 manually from https://launchpad.net/ubuntu/+source/trnascan-se/2.0.0-1
 
 #install barrnap-0.8
 echo "installing barrnap"
@@ -29,3 +30,4 @@ sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplot
 echo "Don't forget:"
 echo "1. download and install GeneMarkS"
 echo "2. edit the external_tools.txt file as needed"
+echo "3. install tRNAscan-SE 2.0 manually from https://launchpad.net/ubuntu/+source/trnascan-se/2.0.0-1"
