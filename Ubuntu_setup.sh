@@ -5,6 +5,8 @@
 #install tRNAscan-SE 
 echo "installing tRNAscan"
 #sudo apt-add-repository -y "deb http://http.us.debian.org/debian sid main non-free"
+#sudo apt-get update ##(will give errors)
+##sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys (keys missing)
 #sudo apt-get -y update
 #sudo apt-get -y install trnascan-se
 ##install tRNAscan-SE 2.0 manually from https://launchpad.net/ubuntu/+source/trnascan-se/2.0.0-1
