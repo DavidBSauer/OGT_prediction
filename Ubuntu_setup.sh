@@ -4,8 +4,8 @@
 
 #install tRNAscan-SE 
 echo "installing tRNAscan"
-sudo apt-get update
-sudo apt-get install gcc make perl automake
+sudo apt-get -y update
+sudo apt-get -y install gcc make perl automake
 wget http://eddylab.org/infernal/infernal-1.1.2.tar.gz
 tar -zxvf infernal-1.1.2.tar.gz
 cd infernal-1.1.2
