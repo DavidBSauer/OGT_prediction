@@ -16,7 +16,7 @@ import tarfile
 commands = {}
 f = open('external_tools.txt','r')
 for line in f.readlines():
-	commands[line.split('\t')[0].strip()]=line.split('\t')[1].strip()
+	commands[line.split()[0].strip()]=line.split()[1].strip()
 f.close()
 
 
