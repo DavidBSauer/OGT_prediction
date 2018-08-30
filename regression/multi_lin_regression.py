@@ -187,7 +187,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			plt.tick_params(axis='y',which='both',left=False,right=False)
 			fig_title = title+'\nN='+str(len(training_reported_OGTs)+len(testing_reported_OGTs))+' r = '+str(current_r)[0:6]+' RMSE='+str(current_RMSE)[0:6]
 			plt.title(fig_title)		
-			plt.savefig('./figures/regression_'+title+'.png')
+			plt.savefig('./figures/'+title+'.png')
 			plt.cla()
 			plt.clf()
 			plt.close()
