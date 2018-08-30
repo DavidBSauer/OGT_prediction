@@ -26,10 +26,12 @@ cd ..
 
 #install barrnap-0.9
 echo "installing barrnap"
-cd $HOME
+mkdir External_tools
+cd External_tools
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
-echo "PATH=$PATH:$HOME/barrnap-0.9/bin" >> .bashrc
+echo "PATH=$PATH:$PWD/barrnap-0.9/bin" >> .bashrc
+cd ..
 
 #install python
 echo "installing python and necessary python packages"
@@ -43,5 +45,5 @@ sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplot
 #go to exon.gatech.edu/GeneMark/license_download.cgi
 #download Genemark-S and the 64_bit key
 echo "Don't forget:"
-echo "1. download and install GeneMarkS"
+echo "1. download and install GeneMarkS to External_tools"
 echo "2. edit the external_tools.txt file as needed"
