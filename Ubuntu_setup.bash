@@ -36,7 +36,6 @@ echo "bedtools bedtools" >> ../external_tools.txt
 echo "installing barrnap"
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
-cd ..
 echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> ../external_tools.txt
 
 #install python
