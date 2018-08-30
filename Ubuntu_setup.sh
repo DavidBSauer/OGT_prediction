@@ -40,10 +40,11 @@ cd ..
 echo "barrnap barrnap" >> External_tools.txt
 
 #install python
-echo "installing python and necessary python packages"
+echo "installing python"
 sudo apt-get -y install python-pip python-dev build-essential
 
 #install python packages
+echo "install python packages"
 sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib-venn
 
 #install GeneMarkS
