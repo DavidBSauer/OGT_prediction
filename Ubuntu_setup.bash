@@ -2,6 +2,8 @@
 
 #setting up in a fresh Ubuntu install. Tested on Ubuntu 18.04 LTS
 
+cores=$(grep -c ^processor /proc/cpuinfo)
+
 mkdir External_tools
 cd External_tools
 
@@ -13,7 +15,7 @@ wget http://eddylab.org/infernal/infernal-1.1.2.tar.gz
 tar -zxvf infernal-1.1.2.tar.gz
 cd infernal-1.1.2
 ./configure
-make
+make -j $cores
 make check
 sudo make install
 cd ..
@@ -22,7 +24,7 @@ wget http://trna.ucsc.edu/software/trnascan-se-2.0.0.tar.gz
 tar -zxvf trnascan-se-2.0.0.tar.gz
 cd tRNAscan-SE-2.0
 ./configure
-make
+make -j $cores
 sudo make install
 sudo chmod 755 /usr/local/lib/tRNAscan-SE/tRNAscanSE/
 cd ..
