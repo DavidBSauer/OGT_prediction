@@ -23,11 +23,11 @@ make
 sudo make install
 sudo chmod 755 /usr/local/lib/tRNAscan-SE/tRNAscanSE/
 cd ..
-echo "tRNAscan-SE tRNAscan-SE" > External_tools.txt
+echo "tRNAscan-SE tRNAscan-SE" > external_tools.txt
 
 #installing bedtools
 sudo apt-get -y install bedtools
-echo "bedtools bedtools" >> External_tools.txt
+echo "bedtools bedtools" >> external_tools.txt
 
 #install barrnap-0.9
 echo "installing barrnap"
@@ -36,7 +36,7 @@ cd External_tools
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
 cd ..
-echo "barrnap $PWD/barrnap-0.9/bin" >> External_tools.txt
+echo "barrnap $PWD/barrnap-0.9/bin" >> external_tools.txt
 
 #install python
 echo "installing python"
@@ -52,4 +52,4 @@ sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplot
 echo "Don't forget:"
 echo "1. download and install GeneMarkS to External_tools"
 echo "2. edit the external_tools.txt file with the absolute path to gmsn.pl"
-echo "Genemark [absolute_path_to_gmsn.pl]" >> External_tools.txt
+echo "Genemark [absolute_path_to_gmsn.pl]" >> external_tools.txt
