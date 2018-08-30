@@ -4,18 +4,31 @@
 
 #install tRNAscan-SE 
 echo "installing tRNAscan"
-#sudo apt-add-repository -y "deb http://http.us.debian.org/debian sid main non-free"
-#sudo apt-get update ##(will give errors)
-##sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys (keys missing)
-#sudo apt-get -y update
-#sudo apt-get -y install trnascan-se
-##install tRNAscan-SE 2.0 manually from https://launchpad.net/ubuntu/+source/trnascan-se/2.0.0-1
+sudo apt-get update
+sudo apt-get install gcc make perl automake
+wget http://eddylab.org/infernal/infernal-1.1.2.tar.gz
+tar -zxvf infernal-1.1.2.tar.gz
+cd infernal-1.1.2
+./configure
+make
+make check
+sudo make install
+cd ..
 
-#install barrnap-0.8
+wget http://trna.ucsc.edu/software/trnascan-se-2.0.0.tar.gz
+tar -zxvf trnascan-se-2.0.0.tar.gz
+cd tRNAscan-SE-2.0
+./configure
+make
+sudo make install
+sudo chmod 755 /usr/local/lib/tRNAscan-SE/tRNAscanSE/
+cd ..
+
+#install barrnap-0.9
 echo "installing barrnap"
 cd $HOME
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
-tar zxvf 0.9.tar.gz
+tar -zxvf 0.9.tar.gz
 echo "PATH=$PATH:$HOME/barrnap-0.9/bin" >> .bashrc
 
 #install python
@@ -32,4 +45,3 @@ sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplot
 echo "Don't forget:"
 echo "1. download and install GeneMarkS"
 echo "2. edit the external_tools.txt file as needed"
-echo "3. install tRNAscan-SE 2.0 manually from https://launchpad.net/ubuntu/+source/trnascan-se/2.0.0-1"
