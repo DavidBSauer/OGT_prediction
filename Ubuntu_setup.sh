@@ -35,9 +35,8 @@ mkdir External_tools
 cd External_tools
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
-echo "PATH=$PATH:$PWD/barrnap-0.9/bin" >> ~/.bashrc
 cd ..
-echo "barrnap barrnap" >> External_tools.txt
+echo "barrnap $PWD/barrnap-0.9/bin" >> External_tools.txt
 
 #install python
 echo "installing python"
