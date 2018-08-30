@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#install fresh ubuntu
+#setting up in a fresh Ubuntu install. Tested on Ubuntu 18.04 LTS
 
 #install tRNAscan-SE 
 echo "installing tRNAscan"
