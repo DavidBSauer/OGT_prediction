@@ -2,8 +2,10 @@
 
 #setting up in a fresh Ubuntu install. Tested on Ubuntu 18.04 LTS
 
+#get the number of cores to speed up make
 cores=$(grep -c ^processor /proc/cpuinfo)
 
+#create and move into the External_tools directory
 mkdir External_tools
 cd External_tools
 
