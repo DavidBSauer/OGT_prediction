@@ -34,11 +34,15 @@ if not os.path.exists('./figures/individual_features'):
    os.makedirs('./figures/individual_features')
 
 
-def r_calc((feature,species_features,species_OGTs,clade,valid_species,unit)):
-	if not os.path.exists('./figures/individual_features/'+clade):
-	   os.makedirs('./figures/individual_features/'+clade)
-	if not os.path.exists('./files/individual_features/'+clade):
-	   os.makedirs('./files/individual_features/'+clade)
+def r_calc((feature,species_features,species_OGTs,rank,clade,valid_species,unit)):
+	if not os.path.exists('./figures/individual_features/'+rank):
+	   os.makedirs('./figures/individual_features/'+rank)
+	if not os.path.exists('./files/individual_features/'+rank):
+	   os.makedirs('./files/individual_features/'+rank)
+	if not os.path.exists('./figures/individual_features/'+rank+'/'+clade):
+	   os.makedirs('./figures/individual_features/'+rank+'/'+clade)
+	if not os.path.exists('./files/individual_features/'+rank+'/'+clade):
+	   os.makedirs('./files/individual_features/'+rank+'/'+clade)
 
 	feature_r = None #catch if a problem in linear regression
 	values = []
@@ -66,14 +70,14 @@ def r_calc((feature,species_features,species_OGTs,clade,valid_species,unit)):
 		plt.rc('font')
 		plt.ylabel(feature)
 		plt.xlabel('Measured '+unit,fontsize=25)
-		plt.savefig('./figures/individual_features/'+clade+'/regression_'+clade+'_'+feature.replace(':','').replace(' ','_')+'.png')		
+		plt.savefig('./figures/individual_features/'+rank+'/'+clade+'/regression_'+clade+'_'+feature.replace(':','').replace(' ','_')+'.png')		
 		plt.cla()
 		plt.clf()
 		plt.close()	
 		
 	
 		#record the values for each clade-feature-OGTs to be available for further analysis/replot
-		g = open('./files/individual_features/'+clade+'/raw_data_'+clade+'_'+feature.replace(':','').replace(' ','_')+'.txt','w')
+		g = open('./files/individual_features/'+rank+'/'+clade+'/raw_data_'+clade+'_'+feature.replace(':','').replace(' ','_')+'.txt','w')
 		g.write('OGT\tfeature_value\n')
 		for x in range(0,len(x_values),1):
 			g.write(str(x_values[x])+'\t'+str(y_values[x])+'\n')
@@ -81,9 +85,9 @@ def r_calc((feature,species_features,species_OGTs,clade,valid_species,unit)):
 	return (feature,feature_r)
 
 
-def rs(features,species_features,species_OGTs,clade,valid_species,unit):
+def rs(features,species_features,species_OGTs,rank,clade,valid_species,unit):
 	#create a list of values needed for analysis
-	feature_list = [(feature,species_features,species_OGTs,clade,valid_species,unit) for feature in features]
+	feature_list = [(feature,species_features,species_OGTs,rank,clade,valid_species,unit) for feature in features]
 	
 	#run in parallel
 	p = mp.Pool()
