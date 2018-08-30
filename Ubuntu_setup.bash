@@ -2,6 +2,9 @@
 
 #setting up in a fresh Ubuntu install. Tested on Ubuntu 18.04 LTS
 
+mkdir External_tools
+cd External_tools
+
 #install tRNAscan-SE 
 echo "installing tRNAscan"
 sudo apt-get -y update
@@ -23,20 +26,18 @@ make
 sudo make install
 sudo chmod 755 /usr/local/lib/tRNAscan-SE/tRNAscanSE/
 cd ..
-echo "tRNAscan-SE tRNAscan-SE" > external_tools.txt
+echo "tRNAscan-SE tRNAscan-SE" > ../external_tools.txt
 
 #installing bedtools
 sudo apt-get -y install bedtools
-echo "bedtools bedtools" >> external_tools.txt
+echo "bedtools bedtools" >> ../external_tools.txt
 
 #install barrnap-0.9
 echo "installing barrnap"
-mkdir External_tools
-cd External_tools
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
 cd ..
-echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> external_tools.txt
+echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> ../external_tools.txt
 
 #install python
 echo "installing python"
@@ -52,4 +53,4 @@ sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplot
 echo "Don't forget:"
 echo "1. download and install GeneMarkS to External_tools"
 echo "2. edit the external_tools.txt file with the absolute path to gmsn.pl"
-echo "Genemark [absolute_path_to_gmsn.pl]" >> external_tools.txt
+echo "Genemark [absolute_path_to_gmsn.pl]" >> ../external_tools.txt
