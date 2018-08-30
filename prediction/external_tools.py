@@ -86,7 +86,7 @@ def genemark((genome_file,species)):
 	#run gmsn.pl
 	#settings: --prok prokaryotic, --combine model parameters
 	global commands
-	command = '../../../../..'+commands['Genemark']+' --prok --combine --gm --fnn ../'+genome_file
+	command = commands['Genemark']+' --prok --combine --gm --fnn ../'+genome_file
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	if err == '': #catching errors for genomes that fail in genemark analysis
