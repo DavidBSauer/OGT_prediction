@@ -191,9 +191,3 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			plt.cla()
 			plt.clf()
 			plt.close()
-
-			#calculate regression against randomized data to get a sense of the worst case RMSE/r values
-			random_testing_OGTs = np.random.permutation(testing_reported_OGTs)
-			RMSE = math.sqrt(np.mean([(random_testing_OGTs[x]-testing_reported_OGTs[x])**2 for x in range(0,len(testing_reported_OGTs),1)]))
-			r = pearsonr(random_testing_OGTs,testing_reported_OGTs)[0]
-			logging.info('against randomized data the RMSE was ='+str(RMSE)+', r ='+str(r))
