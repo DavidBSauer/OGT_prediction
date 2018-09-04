@@ -11,7 +11,6 @@ from BCBio import GFF
 import gzip
 import tarfile
 
-
 #load external tool commands
 commands = {}
 f = open('external_tools.txt','r')
@@ -19,6 +18,30 @@ for line in f.readlines():
 	commands[line.split()[0].strip()]=line.split()[1].strip()
 f.close()
 
+#record version
+def versions():
+	global commands
+	p = subprocess.Popen([commands['tRNAscan-SE']+' -h'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	out,err = p.communicate()
+	logging.info('tRNAscan-SE version info: '+err.split('\n')[1].strip())
+	p = subprocess.Popen([commands['bedtools']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	out,err = p.communicate()
+	logging.info('bedtools version info: '+out.strip())
+	p = subprocess.Popen([commands['barrnap']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	out,err = p.communicate()
+	logging.info('barrnap version info: '+err.strip())
+	p = subprocess.Popen([commands['genemark']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	out,err = p.communicate()
+	logging.info('genemark version info: '+out.strip())
+	logging.info('Numpy version: '+np.__version__)
+	import Bio
+	logging.info('Biopython version: '+Bio.__version__)
+	del(Bio)
+	import sys
+	logging.info('Python version: '+sys.version)
+	del(sys)
+
+versions()
 
 def make_tarfile((genome_file,species)):
 	folder = '_'.join(genome_file.split('.')[:-1])

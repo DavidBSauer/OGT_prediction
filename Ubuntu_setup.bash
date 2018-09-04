@@ -53,4 +53,4 @@ sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplot
 echo "Don't forget:"
 echo "1. download and install GeneMarkS to External_tools"
 echo "2. edit the external_tools.txt file with the absolute path to gmsn.pl"
-echo "Genemark [absolute_path_to_gmsn.pl]" >> ../external_tools.txt
+echo "genemark [absolute_path_to_gmsn.pl]" >> ../external_tools.txt
