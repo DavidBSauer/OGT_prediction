@@ -41,11 +41,11 @@ echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> ../external_tools.txt
 
 #install python
 echo "installing python"
-sudo apt-get -y install python-pip python-dev build-essential
+sudo apt-get -y install python3 python3-dev python3-pip build-essential python3-tk
 
 #install python packages
 echo "install python packages"
-sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib matplotlib-venn
+sudo pip3 install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib matplotlib-venn
 
 #install GeneMarkS
 #go to exon.gatech.edu/GeneMark/license_download.cgi
