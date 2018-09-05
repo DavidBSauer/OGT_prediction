@@ -42,7 +42,7 @@ def dinucleotide_freq(data):
 	#ignore dinucleotides with Ns
 	counts ={x:0 for x in ['AA', 'AC', 'AG', 'AT', 'CA', 'CC', 'CG', 'CT', 'GA', 'GC', 'GG', 'GT', 'TA', 'TC', 'TG', 'TT']}
 	total = 0
-	keys = counts.keys()
+	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
 		input = data[x]

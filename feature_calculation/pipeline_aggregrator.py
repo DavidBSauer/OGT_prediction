@@ -3,18 +3,18 @@ import logging
 import csv
 import multiprocessing as mp
 import random
-import genomic
-import tRNA
-import protein
-import ORFs
+#import genomic
+#import tRNA
+#import protein
+#import ORFs
 import external_tools
-import rRNA
+#import rRNA
 import operator
 import os
 
 script, genome_species_file, species_clade_file = argv
 
-logging.basicConfig(filename=str('feature_calculation.log'), level=logging.INFO)
+logging.basicConfig(filename=str('feature_calculation.log'), level=logging.DEBUG)
 
 #read in the species-clade file. save as dict species->clade
 logging.info("trying to open species-taxon file")
@@ -56,6 +56,7 @@ def features_per_genome(inputs):
 	(genome_file,species) = inputs
 	result = {}
 	result['species']=species
+	'''
 	#create folders and decompress
 	genome_file = external_tools.setup((genome_file,species))	
 	
@@ -82,7 +83,7 @@ def features_per_genome(inputs):
 	#calculate rRNA features based on predicted domain
 	if pred_test:
 		result['rRNA_domain']=domain_pred	
-		(rRNA_pred_test,rRNA_pred_seq) = external_tools.rRNA_seq((genome_file,species),domain_pred,'pred')
+		(rRNA_pred_test,rRNA_pred_seq) = external_tools.rRNA_seq((genome_file,species,domain_pred,'pred'))
 		if rRNA_pred_test:		
 			rRNA_pred_data = rRNA.analysis(rRNA_pred_seq)
 			result['rRNA_pred']=rRNA_pred_data
@@ -90,7 +91,7 @@ def features_per_genome(inputs):
 	global species_clade
 	domain_assigned = species_clade[species]
 	if domain_results[domain_assigned]:
-		(rRNA_assigned_test,rRNA_assigned_seq) = external_tools.rRNA_seq((genome_file,species),domain_assigned,'assigned')
+		(rRNA_assigned_test,rRNA_assigned_seq) = external_tools.rRNA_seq((genome_file,species,domain_assigned,'assigned'))
 		if rRNA_assigned_test:		
 			rRNA_assigned_data = rRNA.analysis(rRNA_assigned_seq)
 			result['rRNA_assigned']=rRNA_assigned_data
@@ -108,10 +109,11 @@ def features_per_genome(inputs):
 		logging.info('Problem getting ORFs for '+genome_file)	
 		
 	external_tools.cleanup((genome_file,species))
+	'''
 	return (genome_file,result)
-
+	
 #calculate features in parallel
-'''
+
 p = mp.Pool()
 results = p.map(features_per_genome, to_analyze)
 p.close()
@@ -119,7 +121,7 @@ p.close()
 results =[]
 for x in to_analyze:
 	results.append(features_per_genome(x))
-
+'''
 results = {x[0]:x[1] for x in results}
 
 #write out the results by feature class
