@@ -7,7 +7,6 @@ import shutil
 import numpy as np
 import subprocess
 import logging
-logger = logging.getLogger(__name__)
 from BCBio import GFF
 import gzip
 import tarfile
@@ -24,22 +23,22 @@ def versions():
 	global commands
 	p = subprocess.Popen([commands['tRNAscan-SE']+' -h'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logger.info('tRNAscan-SE version info: '+err.decode('utf-8').split('\n')[1].strip())
+	logging.info('tRNAscan-SE version info: '+err.decode('utf-8').split('\n')[1].strip())
 	p = subprocess.Popen([commands['bedtools']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logger.info('bedtools version info: '+out.decode('utf-8').strip())
+	logging.info('bedtools version info: '+out.decode('utf-8').strip())
 	p = subprocess.Popen([commands['barrnap']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logger.info('barrnap version info: '+err.decode('utf-8').strip())
+	logging.info('barrnap version info: '+err.decode('utf-8').strip())
 	p = subprocess.Popen([commands['genemark']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logger.info('genemark version info: '+out.decode('utf-8').strip())
-	logger.info('Numpy version: '+np.__version__)
+	logging.info('genemark version info: '+out.decode('utf-8').strip())
+	logging.info('Numpy version: '+np.__version__)
 	import Bio
-	logger.info('Biopython version: '+Bio.__version__)
+	logging.info('Biopython version: '+Bio.__version__)
 	del(Bio)
 	import sys
-	logger.info('Python version: '+sys.version)
+	logging.info('Python version: '+sys.version)
 	del(sys)
 	print('running versions')
 
@@ -106,7 +105,7 @@ def tRNA(inputs):
 			return (False,None)
 	else:
 		#tRNAscan-SE produced errors
-		logger.info('error with tRNAscan for '+genome_file+' with a message of \n'+err)
+		logging.info('error with tRNAscan for '+genome_file+' with a message of \n'+err)
 		return (False,None)
 
 #using GeneMark ORFfinder
@@ -129,11 +128,11 @@ def genemark(inputs):
 		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/genemark/'+genome_file+'.fnn'):
 			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/genemark/'+genome_file+'.fnn','fasta'))
 		else:
-			logger.info('could not find predicted ORFs for '+genome_file)
+			logging.info('could not find predicted ORFs for '+genome_file)
 			return (False,None)
 	else:
 		#gmsn.pl produced and error		
-		logger.info('error on '+genome_file+' gmsn.pl step with a message of\n'+err)
+		logging.info('error on '+genome_file+' gmsn.pl step with a message of\n'+err)
 		os.chdir('../../../../../')
 		return (False,None)
 
@@ -154,7 +153,7 @@ def rRNA(inputs):
 	if err == '':
 		domain_results['Bacteria'] = True
 	else:
-		logger.info('error with barrnap bacterial for '+genome_file+' with a message of\n'+err)
+		logging.info('error with barrnap bacterial for '+genome_file+' with a message of\n'+err)
 		domain_results['Bacteria'] = False
 	#calculate rRNAs using archaea hmm
 	command = commands['barrnap']+' --quiet --threads 1 --kingdom arc ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Archaea.txt'
@@ -165,7 +164,7 @@ def rRNA(inputs):
 	if err == '':
 		domain_results['Archaea'] = True
 	else:
-		logger.info('error with barrnap archaea for '+genome_file+' with a message of\n'+err)
+		logging.info('error with barrnap archaea for '+genome_file+' with a message of\n'+err)
 		domain_results['Archaea'] = False
 	return domain_results
 	
@@ -217,10 +216,10 @@ def rRNA_seq(inputs):
 			return (True,seqs)
 		else:
 			#did not predict any rRNA	
-			logger.info('did not predict any rRNA for '+genome_file)
+			logging.info('did not predict any rRNA for '+genome_file)
 			return (False,None)
 	else:
 		#bedtools produced an error
-		logger.info('error in bedtools for '+genome_file+' with a message of\n'+err)
+		logging.info('error in bedtools for '+genome_file+' with a message of\n'+err)
 		return (False,None)
 
