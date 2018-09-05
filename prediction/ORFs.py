@@ -1,4 +1,5 @@
 import logging
+logger = logging.getLogger('prediction')
 
 def analysis(data,t_size):
 	#calculate all features
@@ -79,7 +80,7 @@ def codon(data):
 	#calculate the fraction of each codon in the ORFs
 	counts ={x:0.0 for x in ['AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', 'AGA', 'AGC', 'AGG', 'AGT', 'ATA', 'ATC', 'ATG', 'ATT', 'CAA', 'CAC', 'CAG', 'CAT', 'CCA', 'CCC', 'CCG', 'CCT', 'CGA', 'CGC', 'CGG', 'CGT', 'CTA', 'CTC', 'CTG', 'CTT', 'GAA', 'GAC', 'GAG', 'GAT', 'GCA', 'GCC', 'GCG', 'GCT', 'GGA', 'GGC', 'GGG', 'GGT', 'GTA', 'GTC', 'GTG', 'GTT', 'TAA', 'TAC', 'TAG', 'TAT', 'TCA', 'TCC', 'TCG', 'TCT', 'TGA', 'TGC', 'TGG', 'TGT', 'TTA', 'TTC', 'TTG', 'TTT']}
 	total = 0.0
-	keys = counts.keys()
+	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
 		input = data[x].seq
@@ -159,7 +160,7 @@ def dinucleotide_freq(data):
 	#ignore dinucleotides with Ns
 	counts ={x:0.0 for x in ['AA', 'AC', 'AG', 'AT', 'CA', 'CC', 'CG', 'CT', 'GA', 'GC', 'GG', 'GT', 'TA', 'TC', 'TG', 'TT']}
 	total = 0.0
-	keys = counts.keys()
+	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
 		input = data[x]

@@ -114,18 +114,18 @@ for clade in ['all']:
 	#for all species, calculated with increasing feature classes
 	for analysis in analysis_sets:
 		logger.info('Running multiple linear regression for '+clade+' species and feature sets of '+'+'.join(analysis))
-		multi_lin_regression.regress(rank+'_'+clade+'_'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+		multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
 	
 	#limit OGT range to species with OGT >= 25C
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
 	valid_species = [species for species in species_rank_dicts[rank][clade] if species_OGT[species]>25]	
-	multi_lin_regression.regress(rank+'_'+clade+'_'+'+'.join(analysis)+'_>25',valid_species,analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_>25',valid_species,analysis,features,species_features,species_OGT,testing,rvalues,unit)
 
 	#exclude genome size
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
-	multi_lin_regression.regress(rank+'_'+clade+'_'+'+'.join(analysis)+'_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
 
 logger.info('Calculate multiple linear regression of superkingdom specific data')
 for clade in ['Archaea','Bacteria']:
@@ -137,18 +137,18 @@ for clade in ['Archaea','Bacteria']:
 	#for specific superkingdoms, calculate regression using all features classes
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
-	multi_lin_regression.regress(rank+'_'+clade+'_'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
 
 	#limit OGT range to species with OGT >= 25C
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
 	valid_species = [species for species in species_rank_dicts[rank][clade] if species_OGT[species]>25]	
-	multi_lin_regression.regress(rank+'_'+clade+'_'+'+'.join(analysis)+'_>25',valid_species,analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_>25',valid_species,analysis,features,species_features,species_OGT,testing,rvalues,unit)
 
 	#exclude genome size
 	logger.info('Running multiple linear regression for '+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
-	multi_lin_regression.regress(rank+'_'+clade+'_'+'+'.join(analysis)+'_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
 
 
 #run regression by clade
@@ -162,5 +162,5 @@ for rank in [level for level in species_rank_dicts.keys() if not(level == 'super
 			if len([x for x in rvalues.keys() if abs(rvalues[x])>0.3])>0: #run regression only if there are correlated features
 				analysis = analysis_sets[-1] #calculate regression using all features
 				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
-				multi_lin_regression.regress(rank+'_'+clade+'_all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+				multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
 		

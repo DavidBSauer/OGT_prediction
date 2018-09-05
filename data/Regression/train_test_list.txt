@@ -2666,7 +2666,7 @@ rhodanobacter_spathiphylli	train
 corynebacterium_humireducens	train
 gluconacetobacter_intermedius	train
 enterobacter_arachidis	train
-nannospalax_ehrenbergi 2n	train
+nannospalax_ehrenbergi\CA2n	train
 orycteropus_afer	train
 actinomadura_chokoriensis	test
 gallus_gallus	train
@@ -4362,7 +4362,7 @@ williamsia_serinedens	train
 rhizobium_	train
 neptunomonas_japonica	train
 halomonas_saccharevitans	train
-sphingobacterium_composti†	test
+sphingobacterium_composti\A0	test
 thiococcus_pfennigii	test
 macrolepiota_puellaris	test
 gluconacetobacter_hansenii	train
@@ -7004,7 +7004,7 @@ diaporthe_citri	train
 providencia_sneebia	train
 vibrio_vulnificus	train
 butyribacterium_methylotrophicum	test
-paecilomyces_varioti bainierb	train
+paecilomyces_varioti\CAbainierb	train
 ascosphaera_apis	test
 thermoproteus_neutrophilus	test
 treponema_denticola	test

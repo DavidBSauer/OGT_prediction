@@ -1,8 +1,10 @@
 from Bio import SeqIO
 import logging
+logger = logging.getLogger('prediction')
 
-def analysis((genome_file,species)):
+def analysis(inputs):
 	#calculate all genomic features of the genome
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	data = SeqIO.index('./output/genomes/'+species+'/'+folder+'/'+genome_file,'fasta')
 	results ={}
@@ -41,7 +43,7 @@ def dinucleotide_freq(data):
 	#ignore dinucleotides with Ns
 	counts ={x:0 for x in ['AA', 'AC', 'AG', 'AT', 'CA', 'CC', 'CG', 'CT', 'GA', 'GC', 'GG', 'GT', 'TA', 'TC', 'TG', 'TT']}
 	total = 0
-	keys = counts.keys()
+	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
 		input = data[x]

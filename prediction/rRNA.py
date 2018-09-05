@@ -1,4 +1,5 @@
 import logging
+logger = logging.getLogger('prediction')
 
 def analysis(data):
 	#calculate all rRNA features

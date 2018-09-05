@@ -7,6 +7,7 @@ import shutil
 import numpy as np
 import subprocess
 import logging
+logger = logging.getLogger('prediction')
 from BCBio import GFF
 import gzip
 import tarfile
@@ -23,46 +24,49 @@ def versions():
 	global commands
 	p = subprocess.Popen([commands['tRNAscan-SE']+' -h'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('tRNAscan-SE version info: '+err.split('\n')[1].strip())
+	logger.info('tRNAscan-SE version info: '+err.decode('utf-8').split('\n')[1].strip())
 	p = subprocess.Popen([commands['bedtools']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('bedtools version info: '+out.strip())
+	logger.info('bedtools version info: '+out.decode('utf-8').strip())
 	p = subprocess.Popen([commands['barrnap']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('barrnap version info: '+err.strip())
+	logger.info('barrnap version info: '+err.decode('utf-8').strip())
 	p = subprocess.Popen([commands['genemark']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('genemark version info: '+out.strip())
-	logging.info('Numpy version: '+np.__version__)
+	logger.info('genemark version info: '+out.decode('utf-8').strip())
+	logger.info('Numpy version: '+np.__version__)
 	import Bio
-	logging.info('Biopython version: '+Bio.__version__)
+	logger.info('Biopython version: '+Bio.__version__)
 	del(Bio)
 	import sys
-	logging.info('Python version: '+sys.version)
+	logger.info('Python version: '+sys.version)
 	del(sys)
 
 versions()
 
-def make_tarfile((genome_file,species)):
+def make_tarfile(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	with tarfile.open('./output/genomes/'+species+'/'+folder+'.tar.gz', "w:gz") as tar:
 		tar.add('./output/genomes/'+species+'/'+folder, arcname=os.path.basename('./output/genomes/'+species+'/'+folder))
 
 #decompress genome
-def setup((genome_file,species)):
+def setup(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-2])
 	os.mkdir('./output/genomes/'+species+'/'+folder)
 	#uncompress genome
-	input_file = gzip.open('./genomes/'+species+'/'+genome_file,'rb')
+	input_file = gzip.open('./genomes/'+species+'/'+genome_file,'r')
 	g = open('./output/genomes/'+species+'/'+folder+'/'+'.'.join(genome_file.split('.')[:-1]),'w')
 	for line in input_file:	
-		g.write(line.upper())
+		g.write(line.decode('ascii').upper())
 	g.close()
 	input_file.close()
 	return '.'.join(genome_file.split('.')[:-1])
 
 #clean up by decompress genome and compressing genemark and barrnap files
-def cleanup((genome_file,species)):
+def cleanup(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	#remove the uncompressed genome file
 	os.remove('./output/genomes/'+species+'/'+folder+'/'+genome_file)
@@ -72,14 +76,17 @@ def cleanup((genome_file,species)):
 	shutil.rmtree('./output/genomes/'+species+'/'+folder)
 
 #find tRNAs with tRNAScan-SE
-def tRNA((genome_file,species)):
+def tRNA(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	#run tRNAscan
 	#settings: -G General, -q Quiet, -b brief output, -o output_file
 	global commands
-	command = commands['tRNAscan-SE']+' -G -q -b -o ./output/genomes/'+species+'/'+folder+'/trnascan_gff.txt -f ./output/genomes/'+species+'/'+folder+'/trnascan_str.txt ./output/genomes/'+species+'/'+folder+'/'+genome_file
+	command = commands['tRNAscan-SE']+' -G -q --brief --output ./output/genomes/'+species+'/'+folder+'/trnascan_gff.txt --struct ./output/genomes/'+species+'/'+folder+'/trnascan_str.txt ./output/genomes/'+species+'/'+folder+'/'+genome_file
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
+	out = out.decode('utf-8')
+	err = err.decode('utf-8')
 	if err == '': #catching errors for genomes that fail in genemark analysis
 		tRNAs = []
 		#only proceed if the tRNAscan-SE results file exists
@@ -98,63 +105,72 @@ def tRNA((genome_file,species)):
 			return (False,None)
 	else:
 		#tRNAscan-SE produced errors
-		logging.info('error with tRNAscan for '+genome_file+' with a message of \n'+err)
+		logger.info('error with tRNAscan for '+genome_file+' with a message of \n'+err)
 		return (False,None)
 
 #using GeneMark ORFfinder
-def genemark((genome_file,species)):
+def genemark(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	os.mkdir('./output/genomes/'+species+'/'+folder+'/genemark')
 	os.chdir('./output/genomes/'+species+'/'+folder+'/genemark/')
 	#run gmsn.pl
 	#settings: --prok prokaryotic, --combine model parameters
 	global commands
-	command = commands['Genemark']+' --prok --combine --gm --fnn ../'+genome_file
+	command = commands['genemark']+' --prok --combine --gm --fnn ../'+genome_file
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
+	out = out.decode('utf-8')
+	err = err.decode('utf-8')	
 	if err == '': #catching errors for genomes that fail in genemark analysis
 		#return True if no errors produced by gmhmmp
 		os.chdir('../../../../../')
 		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/genemark/'+genome_file+'.fnn'):
 			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/genemark/'+genome_file+'.fnn','fasta'))
 		else:
-			logging.info('could not find predicted ORFs for '+genome_file)
+			logger.info('could not find predicted ORFs for '+genome_file)
 			return (False,None)
 	else:
 		#gmsn.pl produced and error		
-		logging.info('error on '+genome_file+' gmsn.pl step with a message of\n'+err)
+		logger.info('error on '+genome_file+' gmsn.pl step with a message of\n'+err)
 		os.chdir('../../../../../')
 		return (False,None)
 
 #predict rRNA sequences using barrnap
-def rRNA((genome_file,species)):
+def rRNA(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	os.mkdir('./output/genomes/'+species+'/'+folder+'/barrnap')
 	domain_results = {}
 	#calculate rRNAs using bacterial hmm
 	#settings: --quiet Quiet, --threads number_of_threads, --kingdom kingdom_hmm
 	global commands
-	command = commands['Barrnap']+' --quiet --threads 1 --kingdom bac ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Bacteria.txt'
+	command = commands['barrnap']+' --quiet --threads 1 --kingdom bac ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Bacteria.txt'
 	p = subprocess.Popen(command,shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
+	out = out.decode('utf-8')
+	err = err.decode('utf-8')
 	if err == '':
 		domain_results['Bacteria'] = True
 	else:
-		logging.info('error with barrnap bacterial for '+genome_file+' with a message of\n'+err)
+		logger.info('error with barrnap bacterial for '+genome_file+' with a message of\n'+err)
 		domain_results['Bacteria'] = False
 	#calculate rRNAs using archaea hmm
-	command = commands['Barrnap']+' --quiet --threads 1 --kingdom arc ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Archaea.txt'
+	command = commands['barrnap']+' --quiet --threads 1 --kingdom arc ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Archaea.txt'
 	p = subprocess.Popen(command,shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
+	out = out.decode('utf-8')
+	err = err.decode('utf-8')
 	if err == '':
 		domain_results['Archaea'] = True
 	else:
-		logging.info('error with barrnap archaea for '+genome_file+' with a message of\n'+err)
+		logger.info('error with barrnap archaea for '+genome_file+' with a message of\n'+err)
 		domain_results['Archaea'] = False
 	return domain_results
 	
 #classify based on rRNA sequences
-def classify((genome_file,species)):
+def classify(inputs):
+	(genome_file,species) = inputs
 	#considering only 16S rRNA sequences. Test both archaea and eukaryotic HMM, take best hit
 	#if a tie, this would presume bacterial
 	folder = '_'.join(genome_file.split('.')[:-1])
@@ -177,7 +193,8 @@ def classify((genome_file,species)):
 
 
 #calculate rRNA sequences 
-def rRNA_seq((genome_file,species),domain,method):
+def rRNA_seq(inputs):
+	(genome_file,species,domain,method) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	#read in the barrnap results file based on the provide domain assignment
 	f = open('./output/genomes/'+species+'/'+folder+'/barrnap/'+domain+'.txt','r')
@@ -191,16 +208,18 @@ def rRNA_seq((genome_file,species),domain,method):
 	command = commands['bedtools']+' getfasta -fi ./output/genomes/'+species+'/'+folder+'/'+genome_file+' -bed ./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_'+method+'_16S.txt -s -name -fo ./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'.fa'
 	p = subprocess.Popen(command,shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
+	out = out.decode('utf-8')
+	err = err.decode('utf-8')
 	if os.path.isfile('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'.fa'):
 		seqs = SeqIO.index('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'.fa','fasta')
 		if len(seqs) >0:
 			return (True,seqs)
 		else:
 			#did not predict any rRNA	
-			logging.info('did not predict any rRNA for '+genome_file)
+			logger.info('did not predict any rRNA for '+genome_file)
 			return (False,None)
 	else:
 		#bedtools produced an error
-		logging.info('error in bedtools for '+genome_file+' with a message of\n'+err)
+		logger.info('error in bedtools for '+genome_file+' with a message of\n'+err)
 		return (False,None)
 
