@@ -81,7 +81,7 @@ def tRNA(inputs):
 	#run tRNAscan
 	#settings: -G General, -q Quiet, -b brief output, -o output_file
 	global commands
-	command = commands['tRNAscan-SE']+' -G -q -b -o ./output/genomes/'+species+'/'+folder+'/trnascan_gff.txt -f ./output/genomes/'+species+'/'+folder+'/trnascan_str.txt ./output/genomes/'+species+'/'+folder+'/'+genome_file
+	command = commands['tRNAscan-SE']+' -G -q --brief --output ./output/genomes/'+species+'/'+folder+'/trnascan_gff.txt --struct ./output/genomes/'+species+'/'+folder+'/trnascan_str.txt ./output/genomes/'+species+'/'+folder+'/'+genome_file
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	if err == '': #catching errors for genomes that fail in genemark analysis
@@ -114,7 +114,7 @@ def genemark(inputs):
 	#run gmsn.pl
 	#settings: --prok prokaryotic, --combine model parameters
 	global commands
-	command = commands['Genemark']+' --prok --combine --gm --fnn ../'+genome_file
+	command = commands['genemark']+' --prok --combine --gm --fnn ../'+genome_file
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	if err == '': #catching errors for genomes that fail in genemark analysis
@@ -140,7 +140,7 @@ def rRNA(inputs):
 	#calculate rRNAs using bacterial hmm
 	#settings: --quiet Quiet, --threads number_of_threads, --kingdom kingdom_hmm
 	global commands
-	command = commands['Barrnap']+' --quiet --threads 1 --kingdom bac ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Bacteria.txt'
+	command = commands['barrnap']+' --quiet --threads 1 --kingdom bac ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Bacteria.txt'
 	p = subprocess.Popen(command,shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	if err == '':
@@ -149,7 +149,7 @@ def rRNA(inputs):
 		logging.info('error with barrnap bacterial for '+genome_file+' with a message of\n'+err)
 		domain_results['Bacteria'] = False
 	#calculate rRNAs using archaea hmm
-	command = commands['Barrnap']+' --quiet --threads 1 --kingdom arc ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Archaea.txt'
+	command = commands['barrnap']+' --quiet --threads 1 --kingdom arc ./output/genomes/'+species+'/'+folder+'/'+genome_file+' > ./output/genomes/'+species+'/'+folder+'/barrnap/Archaea.txt'
 	p = subprocess.Popen(command,shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	if err == '':

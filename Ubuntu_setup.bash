@@ -45,7 +45,7 @@ sudo apt-get -y install python-pip python-dev build-essential
 
 #install python packages
 echo "install python packages"
-sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib-venn
+sudo pip install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib matplotlib-venn
 
 #install GeneMarkS
 #go to exon.gatech.edu/GeneMark/license_download.cgi
