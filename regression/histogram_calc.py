@@ -1,4 +1,5 @@
 import logging
+logger = logging.getLogger('regression')
 
 #calculate histograms of OGTS vs genomes and species
 
@@ -55,13 +56,13 @@ def calc(genome_species,species_trait,species_clade,unit):
 	#log the minimum and maximum OGTs
 	minimum = min([species_trait[species] for species in all_species])
 	maximum = max([species_trait[species] for species in all_species])
-	logging.info('The mimimum reported '+unit+' in the dataset: '+str(minimum))
-	logging.info('The maximum reported '+unit+' in the dataset: '+str(maximum))
+	logger.info('The mimimum reported '+unit+' in the dataset: '+str(minimum))
+	logger.info('The maximum reported '+unit+' in the dataset: '+str(maximum))
 	
 	#record the number in each superkingdom
 	bacteria = len([species for species in all_species if species in species_clade['superkingdom']['Bacteria']])
 	archaea = len([species for species in all_species if species in species_clade['superkingdom']['Archaea']])
 	
-	logging.info('The number of species in the dataset: '+str(len(all_species)))
-	logging.info('The number of bacteria in the dataset: '+str(bacteria))
-	logging.info('The number of archaea in the dataset: '+str(archaea))
+	logger.info('The number of species in the dataset: '+str(len(all_species)))
+	logger.info('The number of bacteria in the dataset: '+str(bacteria))
+	logger.info('The number of archaea in the dataset: '+str(archaea))

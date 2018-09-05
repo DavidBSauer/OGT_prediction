@@ -1,4 +1,6 @@
 import logging
+logger = logging.getLogger('regression')
+
 #take in file names for features and genomes_species -> return dictionary of species-feature and list of all features
 def species(feature_files):
 	all_features=[]

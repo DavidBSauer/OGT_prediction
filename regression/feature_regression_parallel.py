@@ -2,17 +2,18 @@
 #calculate regression for each feature
 #return dict of [domain][feature] = r-value
 import logging
+logger = logging.getLogger('regression')
 import matplotlib
-logging.info('Matplotlib version: '+matplotlib.__version__)
+logger.info('Matplotlib version: '+matplotlib.__version__)
 matplotlib.use('Agg')
 matplotlib.rcParams['axes.linewidth'] = 3
 import matplotlib.pyplot as plt
 import scipy
-logging.info('SciPy version: '+scipy.__version__)
+logger.info('SciPy version: '+scipy.__version__)
 del scipy
 from scipy.stats import pearsonr
 import numpy as np
-logging.info('NumPy version: '+np.__version__)
+logger.info('NumPy version: '+np.__version__)
 import os
 from matplotlib.ticker import MaxNLocator
 import multiprocessing as mp
@@ -34,7 +35,8 @@ if not os.path.exists('./figures/individual_features'):
    os.makedirs('./figures/individual_features')
 
 
-def r_calc((feature,species_features,species_OGTs,rank,clade,valid_species,unit)):
+def r_calc(inputs):
+	(feature,species_features,species_OGTs,rank,clade,valid_species,unit) = inputs
 	if not os.path.exists('./figures/individual_features/'+rank):
 	   os.makedirs('./figures/individual_features/'+rank)
 	if not os.path.exists('./files/individual_features/'+rank):

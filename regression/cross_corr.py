@@ -1,5 +1,6 @@
 from scipy.stats import pearsonr
 import logging
+logger = logging.getLogger('regression')
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -15,7 +16,8 @@ if not os.path.exists('./figures/cross_correlation'):
    os.makedirs('./figures/cross_correlation')
 
 
-def cc((feature1,feature2,species_features)): #calculate the absolute value of the pearson correlation coefficient between two features
+def cc(inputs): #calculate the absolute value of the pearson correlation coefficient between two features
+	(feature1,feature2,species_features)=inputs
 	x_values =[]
 	y_values =[]
 	for species in species_features.keys():
@@ -27,7 +29,7 @@ def cc((feature1,feature2,species_features)): #calculate the absolute value of t
 
 def calc(rvalues,all_features,species_features,feature_order,clade):
 	corr_features = [feature for feature in rvalues.keys() if abs(rvalues[feature])>=0.3] #find correlated features (abs(pearsonr) >= 0.3)
-	logging.info('the number of correlated features in the '+clade+' dataset: '+str(len(corr_features)))
+	logger.info('the number of correlated features in the '+clade+' dataset: '+str(len(corr_features)))
 
 	#calculate abs(r) 
 	#note: this calculates A-B and B-A, though this could be sped up by simply calculating A-B and then mapping this value to B-A, it's already fast enough

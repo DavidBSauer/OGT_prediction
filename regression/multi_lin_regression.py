@@ -1,8 +1,9 @@
 import multiprocessing as mp
 import math
 import logging
+logger = logging.getLogger('regression')
 import sklearn
-logging.info('Sklearn version: '+sklearn.__version__)
+logger.info('Sklearn version: '+sklearn.__version__)
 del sklearn
 from sklearn import linear_model
 import matplotlib
@@ -30,7 +31,8 @@ if not os.path.exists('./files/regression_models'):
 if not os.path.exists('./files/predictions'):
    os.makedirs('./files/predictions')
 
-def train((features,species_features,species_OGT,testing,valid_species)):
+def train(inputs):
+	(features,species_features,species_OGT,testing,valid_species)=inputs
 	training_feature_values = []
 	testing_feature_values =[]
 	training_OGTs =[]
@@ -93,7 +95,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 
 			#while the model improves, keep adding features
 			#run as long as model improves (via r value), it is not overdetermined, and there are features to add
-			while (best_return['r'] > current_r) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
+			while (best_return['RMSE'] < currenr_RMSE) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
 				#replace current values with new bests
 				current_features = best_return['features']
 				current_r = best_return['r']
@@ -114,18 +116,18 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				#find the best new regression
 				best_return = results[0]
 				for x in results[1:]:
-					if x['r'] > best_return['r']:
+					if x['RMSE'] < best_return['RMSE']:
 						best_return = x
 
 			#catch in case exiting loop for reason other than unimproved regression
-			if best_return['r']> current_r:
+			if best_return['RMSE']< current_RMSE:
 				current_features = best_return['features']
 				current_r = best_return['r']
 				current_RMSE = best_return['RMSE']
 				current_model = best_return['regr']			
 
 			#found the best solution, log and write out coeffs
-			logging.info('the best model the RMSE was ='+str(current_RMSE)+', r ='+str(current_r))
+			logger.info('the best model the RMSE was ='+str(current_RMSE)+', r ='+str(current_r))
 			coefs ={}
 			g = open('./files/regression_models/'+title+'.txt','w')
 			for x in range(0,len(current_features),1):

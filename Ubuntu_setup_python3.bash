@@ -41,7 +41,7 @@ echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> ../external_tools.txt
 
 #install python
 echo "installing python"
-sudo apt-get -y install python3 python3-dev python3-pip build-essential
+sudo apt-get -y install python3 python3-dev python3-pip build-essential python3-tk
 
 #install python packages
 echo "install python packages"
