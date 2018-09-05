@@ -23,16 +23,16 @@ def versions():
 	global commands
 	p = subprocess.Popen([commands['tRNAscan-SE']+' -h'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('tRNAscan-SE version info: '+err.split('\n')[1].strip())
+	logging.info('tRNAscan-SE version info: '+err.decode('utf-8').split('\n')[1].strip())
 	p = subprocess.Popen([commands['bedtools']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('bedtools version info: '+out.strip())
+	logging.info('bedtools version info: '+out.decode('utf-8').strip())
 	p = subprocess.Popen([commands['barrnap']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('barrnap version info: '+err.strip())
+	logging.info('barrnap version info: '+err.decode('utf-8').strip())
 	p = subprocess.Popen([commands['genemark']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logging.info('genemark version info: '+out.strip())
+	logging.info('genemark version info: '+out.decode('utf-8').strip())
 	logging.info('Numpy version: '+np.__version__)
 	import Bio
 	logging.info('Biopython version: '+Bio.__version__)
@@ -43,26 +43,29 @@ def versions():
 
 versions()
 
-def make_tarfile((genome_file,species)):
+def make_tarfile(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	with tarfile.open('./output/genomes/'+species+'/'+folder+'.tar.gz', "w:gz") as tar:
 		tar.add('./output/genomes/'+species+'/'+folder, arcname=os.path.basename('./output/genomes/'+species+'/'+folder))
 
 #decompress genome
-def setup((genome_file,species)):
+def setup(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-2])
 	os.mkdir('./output/genomes/'+species+'/'+folder)
 	#uncompress genome
 	input_file = gzip.open('./genomes/'+species+'/'+genome_file,'rb')
 	g = open('./output/genomes/'+species+'/'+folder+'/'+'.'.join(genome_file.split('.')[:-1]),'w')
 	for line in input_file:	
-		g.write(line.upper())
+		g.write(str(line).upper())
 	g.close()
 	input_file.close()
 	return '.'.join(genome_file.split('.')[:-1])
 
 #clean up by decompress genome and compressing genemark and barrnap files
-def cleanup((genome_file,species)):
+def cleanup(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	#remove the uncompressed genome file
 	os.remove('./output/genomes/'+species+'/'+folder+'/'+genome_file)
@@ -72,7 +75,8 @@ def cleanup((genome_file,species)):
 	shutil.rmtree('./output/genomes/'+species+'/'+folder)
 
 #find tRNAs with tRNAScan-SE
-def tRNA((genome_file,species)):
+def tRNA(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	#run tRNAscan
 	#settings: -G General, -q Quiet, -b brief output, -o output_file
@@ -102,7 +106,8 @@ def tRNA((genome_file,species)):
 		return (False,None)
 
 #using GeneMark ORFfinder
-def genemark((genome_file,species)):
+def genemark(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	os.mkdir('./output/genomes/'+species+'/'+folder+'/genemark')
 	os.chdir('./output/genomes/'+species+'/'+folder+'/genemark/')
@@ -127,7 +132,8 @@ def genemark((genome_file,species)):
 		return (False,None)
 
 #predict rRNA sequences using barrnap
-def rRNA((genome_file,species)):
+def rRNA(inputs):
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	os.mkdir('./output/genomes/'+species+'/'+folder+'/barrnap')
 	domain_results = {}
@@ -154,7 +160,8 @@ def rRNA((genome_file,species)):
 	return domain_results
 	
 #classify based on rRNA sequences
-def classify((genome_file,species)):
+def classify(inputs):
+	(genome_file,species) = inputs
 	#considering only 16S rRNA sequences. Test both archaea and eukaryotic HMM, take best hit
 	#if a tie, this would presume bacterial
 	folder = '_'.join(genome_file.split('.')[:-1])
@@ -177,7 +184,8 @@ def classify((genome_file,species)):
 
 
 #calculate rRNA sequences 
-def rRNA_seq((genome_file,species),domain,method):
+def rRNA_seq(inputs):
+	((genome_file,species),domain,method) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	#read in the barrnap results file based on the provide domain assignment
 	f = open('./output/genomes/'+species+'/'+folder+'/barrnap/'+domain+'.txt','r')

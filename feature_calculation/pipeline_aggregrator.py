@@ -10,6 +10,7 @@ import ORFs
 import external_tools
 import rRNA
 import operator
+import os
 
 script, genome_species_file, species_clade_file = argv
 
@@ -44,14 +45,15 @@ if not(os.path.isdir('./output')):
 if not(os.path.isdir('./output/genomes')):	
 	os.mkdir('./output/genomes')
 
-for species in [x[1] for x in sortedgenomes]:
+for species in [x[1] for x in to_analyze]:
 	#make a folder based on the genome name 
 	if not(os.path.isdir('./output/genomes/'+species)):	
 		os.mkdir('./output/genomes/'+species)
 
 logging.info('Analyzing Genomic features')
 #Analyze features per genome
-def features_per_genome((genome_file,species)):
+def features_per_genome(inputs):
+	(genome_file,species) = inputs
 	result = {}
 	result['species']=species
 	#create folders and decompress
@@ -109,9 +111,14 @@ def features_per_genome((genome_file,species)):
 	return (genome_file,result)
 
 #calculate features in parallel
+'''
 p = mp.Pool()
 results = p.map(features_per_genome, to_analyze)
 p.close()
+'''
+results =[]
+for x in to_analyze:
+	results.append(features_per_genome(x))
 
 results = {x[0]:x[1] for x in results}
 

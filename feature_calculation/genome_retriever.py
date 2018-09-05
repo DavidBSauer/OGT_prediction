@@ -1,4 +1,4 @@
-import urllib2
+from urllib.request import urlopen
 import time
 from sys import argv
 import logging
@@ -26,32 +26,30 @@ logging.info("found "+str(len(species_list))+" species")
 properly_formed = [species for species in species_list if (not(species[0]=='_') and not(species[-1]=='_') and not(species.split('_')[-1] == 'sp.') and len(species.split('_'))==2)]
 logging.info('found '+str(len(properly_formed))+' properly formed species names')
 
-print 'finding all valid genomes'
+print('finding all valid genomes')
   
 addresses ={}
 root_addr= 'ftp://ftp.ensemblgenomes.org/pub/bacteria/release-35/fasta/'
-req = urllib2.Request(root_addr)
 time.sleep(0.1)
 try:
-	response = urllib2.urlopen(req, timeout=60)
+	response = urlopen(root_addr, timeout=60)
 except:
 	#catch if in wrong database
 	logging.info('could not open the ftp page')
 else:
-	the_page = response.read()
+	the_page = response.read().decode('utf-8')
 	the_page = the_page.split('\n')
 	collections = [page.split()[-1].strip() for page in the_page if not(page == '')]
 	for collection in tqdm(collections,unit='collection'):
 		addr = root_addr+collection
-		req = urllib2.Request(addr)
 		time.sleep(0.1)
 		try:
-			response = urllib2.urlopen(req, timeout=60)
+			response = urlopen(addr, timeout=60)
 		except:
 			#catch if in wrong database
 			logging.info('could not open the ftp page for collection: '+collection)
 		else:
-			the_page = response.read()
+			the_page = response.read().decode('utf-8')
 			the_page = the_page.split('\n')
 			genomes = [page.split()[-1].strip() for page in the_page if not(page == '')]
 			for genome in genomes:
@@ -61,13 +59,12 @@ else:
 
 def genome_checksum(genome_addr):
 	checksum_file = genome_addr+'/CHECKSUMS'
-	req = urllib2.Request(checksum_file)
 	try:
-		response = urllib2.urlopen(req,timeout=60)
+		response = urlopen(checksum_file,timeout=60)
 	except:
 		return (False,None,None)
 	else:
-		page = response.read()
+		page = response.read().decode('utf-8')
 		page = page.split('\n')
 		files = {x.split()[-1]:x.split()[0] for x in page if not(x == '')}
 		for file in files.keys():
@@ -77,26 +74,25 @@ def genome_checksum(genome_addr):
 
 def file_checksum(genome_addr,g_file):
 	if g_file != None:
-		req = urllib2.Request(genome_addr+'/'+g_file)
 		try:
-			response = urllib2.urlopen(req, timeout=60)
+			species = '_'.join(g_file.split('.')[0].split('_')[0:2]).lower()
+			if not os.path.exists('./genomes/'+species):
+				os.makedirs('./genomes/'+species) 
+			with urlopen(genome_addr+'/'+g_file, timeout=60) as response, open('./genomes/'+species+'/'+g_file,'wb') as f: 
+				the_file = response.read()
+				f.write(the_file)
+				f.close()
 		except:
 			return (False,None,None)
 		else:
-			the_file = response.read()
-			species = '_'.join(g_file.split('.')[0].split('_')[0:2]).lower()
-			if not os.path.exists('./genomes/'+species):
-				os.makedirs('./genomes/'+species)
-			f = open('./genomes/'+species+'/'+g_file,'w+')
-			f.write(the_file)
-			f.close()
+
 			return (True,int(os.popen('sum ./genomes/'+species+'/'+g_file).read().split()[0]),'./genomes/'+species+'/'+g_file)
 		return (False,None,None)
 	else:
 		return (False,None,None)
 
 
-print 'downloading all valid genomes'
+print('downloading all valid genomes')
 retrieved_list ={}
 retrieved = 0
 logging.info('Number of genomes to retrieve: '+str(len(addresses)))
@@ -116,7 +112,7 @@ for genome_addr in tqdm(addresses.keys(),unit='genome'):
 		(f_test,f_checksum,f_file) = file_checksum(genome_addr,g_name)
 		for z in range(0,10,1):
 			if g_checksum != f_checksum or (not(g_test) or not(f_test)):
-				print 'using checksum loop'
+				print('using checksum loop')
 				time.sleep(60)
 				(g_test,g_checksum,g_name) = genome_checksum(genome_addr)
 				(f_test,f_checksum,f_file) = file_checksum(genome_addr,g_name)

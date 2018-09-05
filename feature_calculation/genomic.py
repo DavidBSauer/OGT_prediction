@@ -1,8 +1,9 @@
 from Bio import SeqIO
 import logging
 
-def analysis((genome_file,species)):
+def analysis(inputs):
 	#calculate all genomic features of the genome
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	data = SeqIO.index('./output/genomes/'+species+'/'+folder+'/'+genome_file,'fasta')
 	results ={}
