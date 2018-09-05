@@ -1,4 +1,5 @@
 import logging
+logger = logging.getLogger('feature_calculation')
 
 #calculate protein parameters given an itterable of nucleotide ORF sequence
 AAs = ['A','C','D','E','F','G','H','I','K','L','M','N','P','Q','R','S','T','V','W','Y']

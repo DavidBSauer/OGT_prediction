@@ -1,4 +1,5 @@
 import logging
+logger = logging.getLogger('feature_calculation')
 
 def analysis(data,t_size):
 	#calculate all features

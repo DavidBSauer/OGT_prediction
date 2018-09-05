@@ -1,5 +1,6 @@
 from Bio import SeqIO
 import logging
+logger = logging.getLogger('feature_calculation')
 
 def analysis(inputs):
 	#calculate all genomic features of the genome
