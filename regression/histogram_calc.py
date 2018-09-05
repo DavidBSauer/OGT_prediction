@@ -17,7 +17,7 @@ def calc(genome_species,species_trait,species_clade,unit):
 		genome_redundancy[species_count[x]] = genome_redundancy[species_count[x]]+1
 	g= open('./files/genome_redundancy.txt','w')
 	g.write('Genome_redundancy\tSpecies_count\n')
-	keys = genome_redundancy.keys()
+	keys = list(genome_redundancy.keys())
 	keys.sort()
 	for x in keys:
 		g.write(str(x)+'\t'+str(genome_redundancy[x])+'\n')
@@ -37,20 +37,21 @@ def calc(genome_species,species_trait,species_clade,unit):
 	#automatically find bounds of range
 	min_bound = int(0.95*min(species_trait.values()))
 	max_bound = int(1.05*max(species_trait.values()))
+	step_size = int((max_bound-min_bound)/25)
 	
-	#create histogram with 25 steps
-	all_buckets = {q:0 for q in range(min_bound,max_bound,int(max_bound-min_bound)/25)}
+	#create histogram
+	all_buckets = {q:0 for q in range(min_bound,max_bound,step_size)}
 	for clade in ['all','Bacteria','Archaea']:
 		g = open('./files/histogram_'+clade+'.txt','w')
-		buckets = {q:0 for q in range(min_bound,max_bound,int(max_bound-min_bound)/25)}
+		buckets = {q:0 for q in range(min_bound,max_bound,step_size)}
 		for species in all_species:
 			if species in species_clade['superkingdom'][clade]:
-				for z in range(min_bound,max_bound,int(max_bound-min_bound)/25):
+				for z in range(min_bound,max_bound,step_size):
 					if z+5 > species_trait[species] >= z :
 						buckets[z]=buckets[z]+1
 						all_buckets[z]=all_buckets[z]+1
-		for q in range(min_bound,max_bound,int(max_bound-min_bound)/25):
-			g.write(str(q)+' to '+str(q+int(max_bound-min_bound)/25)+' count: '+str(buckets[q])+'\n')
+		for q in range(min_bound,max_bound,step_size):
+			g.write(str(q)+' to '+str(q+step_size)+' count: '+str(buckets[q])+'\n')
 		g.close()
 
 	#log the minimum and maximum OGTs

@@ -70,12 +70,12 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 	#only run regression if there are correlated features for a regression
 	if len(all_features)>0:
 		#find the most correlated feature
-		seed_feature = all_features.items()[0]
-		for feature in all_features.items()[1:]:
+		seed_feature = list(all_features.items())[0]
+		for feature in list(all_features.items())[1:]:
 			if feature[1]>seed_feature[1]: #the most positively correlated feature
 				seed_feature = feature
 		seed_feature = seed_feature[0]
-		all_features = all_features.keys()
+		all_features = list(all_features.keys())
 		#find species which fit within the given clade
 		valid_species = [species for species in species_features.keys() if species in species_to_test]
 		testing_species = [species for species in valid_species if species in testing]
@@ -95,7 +95,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 
 			#while the model improves, keep adding features
 			#run as long as model improves (via r value), it is not overdetermined, and there are features to add
-			while (best_return['RMSE'] < currenr_RMSE) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
+			while (best_return['r'] > current_r) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
 				#replace current values with new bests
 				current_features = best_return['features']
 				current_r = best_return['r']
@@ -116,11 +116,11 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				#find the best new regression
 				best_return = results[0]
 				for x in results[1:]:
-					if x['RMSE'] < best_return['RMSE']:
+					if x['r'] > best_return['r']:
 						best_return = x
 
 			#catch in case exiting loop for reason other than unimproved regression
-			if best_return['RMSE']< current_RMSE:
+			if best_return['r']> current_r:
 				current_features = best_return['features']
 				current_r = best_return['r']
 				current_RMSE = best_return['RMSE']

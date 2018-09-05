@@ -83,6 +83,7 @@ else:
 #average redundant genome-features -> return species->feature->value dictionary. calculate genome and species histograms
 logger.info('Calculate species average features from all genomes')
 species_features,features,genome_species = feature_average.species(feature_files)
+logger.info('Number of genoems: '+str(len(genome_species.keys())))
 logger.info('Number of species: '+str(len(species_features.keys())))
 
 #remove those species without a OGT recorded
