@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import pearsonr
 import os
+from sklearn.metrics import r2_score
 
 params = {
    'axes.labelsize': 25,
@@ -60,7 +61,11 @@ def train(inputs):
 	predicts = regr.predict(testing_feature_values)
 	RMSE = math.sqrt(np.mean((predicts - testing_OGTs) ** 2))
 	r = pearsonr(predicts, testing_OGTs)[0]
-	return {'features':features,'r':r,'RMSE':RMSE,'regr':regr}
+	r2 = r2_score(testing_OGTs,predicts)
+	p = float(len(features))
+	n = float(len(testing_OGTs))
+	adj_r2 = 1-((1-r2)*(n-1)/(n-p-1))
+	return {'features':features,'r':r,'RMSE':RMSE,'regr':regr,'adj_r2':adj_r2}
 
 def regress(title,species_to_test,analysis,features,species_features,species_OGTs,testing,rvalues,unit):
 
@@ -87,18 +92,20 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			best_return = train(([seed_feature],species_features,species_OGTs,testing,valid_species))
 			current_features = best_return['features']
 			current_r = best_return['r']
+			current_adj_r2 = best_return['adj_r2']
 			current_RMSE = best_return['RMSE']
 			current_model = best_return['regr']
 		
 			#dummy value for the first round of the run
-			current_r = 0
+			current_adj_r2 = 0
 
 			#while the model improves, keep adding features
 			#run as long as model improves (via r value), it is not overdetermined, and there are features to add
-			while (best_return['r'] > current_r) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
+			while (best_return['adj_r2'] > current_adj_r2) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
 				#replace current values with new bests
 				current_features = best_return['features']
 				current_r = best_return['r']
+				current_adj_r2 = best_return['adj_r2']
 				current_RMSE = best_return['RMSE']
 				current_model = best_return['regr']
 				
@@ -116,18 +123,19 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				#find the best new regression
 				best_return = results[0]
 				for x in results[1:]:
-					if x['r'] > best_return['r']:
+					if x['adj_r2'] > best_return['adj_r2']:
 						best_return = x
 
 			#catch in case exiting loop for reason other than unimproved regression
-			if best_return['r']> current_r:
+			if best_return['adj_r2']> current_adj_r2:
 				current_features = best_return['features']
 				current_r = best_return['r']
+				current_adj_r2 = best_return['adj_r2']
 				current_RMSE = best_return['RMSE']
 				current_model = best_return['regr']			
 
 			#found the best solution, log and write out coeffs
-			logger.info('the best model the RMSE was ='+str(current_RMSE)+', r ='+str(current_r))
+			logger.info('the best model the RMSE was ='+str(current_RMSE)+', adjusted r ='+str(current_adj_r2))
 			coefs ={}
 			g = open('./files/regression_models/'+title+'.txt','w')
 			for x in range(0,len(current_features),1):
@@ -187,7 +195,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			#plt.yticks([20,40,60,80,100])			
 			plt.tick_params(axis='x',which='both',bottom=False,top=False)
 			plt.tick_params(axis='y',which='both',left=False,right=False)
-			fig_title = title+'\nN='+str(len(training_reported_OGTs)+len(testing_reported_OGTs))+' r = '+str(current_r)[0:6]+' RMSE='+str(current_RMSE)[0:6]
+			fig_title = title+'\nN='+str(len(training_reported_OGTs)+len(testing_reported_OGTs))+' adj r2 = '+str(current_adj_r2)[0:6]+' RMSE='+str(current_RMSE)[0:6]
 			plt.title(fig_title)		
 			plt.savefig('./figures/'+title+'.png')
 			plt.cla()
