@@ -19,6 +19,7 @@ Calculate features for each genome
 python3 genome_retriever.py list_of_species_file
 ```
 Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore)
+
 2. Download taxonomic classification for species of interest.
 ```
 python3 clade_retriever.py list_of_species_file
@@ -42,6 +43,7 @@ Predict the OGT of a species (or many species) using the generated multiple line
 python3 genome_retriever.py list_of_species_file
 ```
 Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore)
+
 2. Download taxonomic classification for species of interest.
 ```
 python3 clade_retriever.py list_of_species_file
