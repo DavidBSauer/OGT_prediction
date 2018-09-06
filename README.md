@@ -2,9 +2,9 @@
 Scripts for calculating features, regression, and prediction of prokaryotic Optimal Growth Temperatures (OGTs)
 
 ## Requirements
-Requires Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, GeneMarkS
+Requires: Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, GeneMarkS
 
-In practice, there is a bash script "Ubuntu_setup.bash" that will install everything except GeneMarkS automatically. 
+In practice, there is a bash script "Ubuntu_setup.bash" that will install everything except GeneMarkS automatically. (Tested on Ubuntu 18.04 LTS) 
 Run as: 
 ```
 ./Ubuntu_setup.bash
