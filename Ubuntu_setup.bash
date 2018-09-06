@@ -30,7 +30,13 @@ cd ..
 echo "tRNAscan-SE tRNAscan-SE" > ../external_tools.txt
 
 #installing bedtools
-sudo apt-get -y install bedtools
+sudo apt-get install zlib1g-dev python
+wget https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz
+tar -zxvf bedtools-2.27.1.tar.gz
+cd bedtools2
+make
+sudo cp ./bin/* /usr/local/bin/
+cd ..
 echo "bedtools bedtools" >> ../external_tools.txt
 
 #install barrnap-0.9
