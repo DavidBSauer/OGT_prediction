@@ -41,6 +41,9 @@ def versions():
 	import sys
 	logger.info('Python version: '+sys.version)
 	del(sys)
+	import platform
+	logger.info('Platform: '+platform.platform())
+	del(platform)
 
 versions()
 

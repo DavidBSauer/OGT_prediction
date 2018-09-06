@@ -15,7 +15,10 @@ import csv
 import histogram_calc as histogram
 import cross_corr
 
-logger.info("python version: "+version)
+import platform
+logger.info('Platform version: '+platform.platform())
+del(platform)
+logger.info("Python version: "+version)
 #run as python regression_pipeline species_OGT_file train_test_file species_taxon_file genome_features tRNA_features rRNA_features ORF_features Protein_features
 
 #whole pipeline
