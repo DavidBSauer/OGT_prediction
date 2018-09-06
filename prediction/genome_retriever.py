@@ -20,7 +20,8 @@ species_list = []
 infile.readline()
 for line in infile.readlines():
 	working = line.split()
-	species_list.append(working[0].strip()) 
+	if ((len(working)>0) and (not(working[0].strip() == ''))):
+		species_list.append(working[0].strip()) 
 infile.close()    
 logging.info("found "+str(len(species_list))+" species")
 properly_formed = [species for species in species_list if (not(species[0]=='_') and not(species[-1]=='_') and not(species.split('_')[-1] == 'sp.') and len(species.split('_'))==2)]
