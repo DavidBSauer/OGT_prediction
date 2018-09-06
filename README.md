@@ -1,8 +1,8 @@
 # OGT_prediction
-Scripts for calculating features, regression, and prediction of prokaryotic Optimal Growth Temperatures (OGTs)
+Scripts for calculating features from genomic sequences, multiple linear regression of those features to the originating species' Optimal Growth Temperatures (OGT), and prediction of a species' OGT using those linear regression models. 
 
 ## Requirements
-Requires: Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, GeneMarkS
+Requires: Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, GeneMarkS.
 
 In practice, there is a bash script "Ubuntu_setup.bash" that will install everything except GeneMarkS automatically. (Tested on Ubuntu 18.04 LTS) 
 Run as: 
@@ -18,7 +18,7 @@ Calculate features for each genome
 ```
 python3 genome_retriever.py list_of_species_file
 ```
-Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore)
+Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
 
 2. Download taxonomic classification for species of interest.
 ```
@@ -42,7 +42,7 @@ Predict the OGT of a species (or many species) using the generated multiple line
 ```
 python3 genome_retriever.py list_of_species_file
 ```
-Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore)
+Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
 
 2. Download taxonomic classification for species of interest.
 ```
@@ -52,4 +52,4 @@ python3 clade_retriever.py list_of_species_file
 ```
 python3 prediction_pipeline.py regression_model_directory/ genomes_retrieved.txt species_taxonomic.txt
 ```
-note: Models for the same taxon in the regression model directory should be cleaned up prior to use.
+note: Models for the same taxon in the regression model directory should be cleaned-up so all taxa models are non-redundant prior to use.
