@@ -166,4 +166,4 @@ for rank in [level for level in species_rank_dicts.keys() if not(level == 'super
 				analysis = analysis_sets[-1] #calculate regression using all features
 				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
 				multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
-		
+logger.info('Exiting normally')		
