@@ -39,10 +39,10 @@ def features_per_genome(inputs):
 		logger.info('Found tRNA for '+genome_file)
 		result['tRNA']=tRNA_data
 	else:
-		logger.info('Cound not retrieve tRNAs for: '+genome_file)
+		logger.info('Cound not retrieve tRNAs for '+genome_file)
 
 	#calculate rRNA features
-	logger.info('Finding rRNAs for: '+genome_file)
+	logger.info('Finding rRNAs for '+genome_file)
 	#run barrnap using both archaea and bacteria hmm models
 	domain_results = external_tools.rRNA((genome_file,species))
 	#using previous assigned domain
