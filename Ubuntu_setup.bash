@@ -30,7 +30,7 @@ cd ..
 echo "tRNAscan-SE tRNAscan-SE" > ../external_tools.txt
 
 #installing bedtools
-sudo apt-get -y install zlib1g-dev python
+sudo apt-get -y install zlib1g-dev python hmmer
 wget https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz
 tar -zxvf bedtools-2.27.1.tar.gz
 cd bedtools2
