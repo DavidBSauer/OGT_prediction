@@ -49,3 +49,4 @@ python3 clade_retriever.py list_of_species_file
 ```
 python3 prediction_pipeline.py regression_model_directory/ genomes_retrieved.txt species_taxonomic.txt
 ```
+note: Models for the same taxon in the regression model directory should be cleaned up prior to use.
