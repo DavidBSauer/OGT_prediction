@@ -72,13 +72,13 @@ def features_per_genome(inputs):
 	if tRNA_test:
 		#if tRNAs were predicted, calculate features
 		tRNA_data = tRNA.analysis(tRNA_seqs)
-		logger.info('Fount tRNA for: '+genome_file)
+		logger.info('Fount tRNA for '+genome_file)
 		result['tRNA']=tRNA_data
 	else:
-		logger.info('Cound not retrieve tRNAs for: '+genome_file)
+		logger.info('Cound not retrieve tRNAs for '+genome_file)
 
 	#calculate rRNA features
-	logger.info('Finding rRNAs for: '+genome_file)
+	logger.info('Finding rRNAs for '+genome_file)
 	#run barrnap using both archaea and bacteria hmm models
 	domain_results = external_tools.rRNA((genome_file,species))
 	#attempt to predict domain using 16S rRNA sequences
@@ -121,6 +121,7 @@ p = mp.Pool()
 results = p.map(features_per_genome, to_analyze)
 p.close()
 '''
+#single thread for trouble shooting
 results =[]
 for x in to_analyze:
 	results.append(features_per_genome(x))
