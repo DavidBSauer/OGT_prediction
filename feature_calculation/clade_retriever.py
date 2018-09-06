@@ -57,8 +57,9 @@ def clade(species_list):
 	return taxa_info
 
 f= open(species_list_input,'r')
-species_list_input = [line.split()[0].strip() for line in f.readlines()]
+lines = [line for line in f.readlines() if len(line.split())>0]
 f.close()
+species_list_input = [line.split()[0].strip() for line in lines]
 logging.info('the number of input species: '+str(len(species_list_input)))
 logging.info('the number of species with retrieved clade info: '+str(len(clade(species_list_input).keys())))
 
