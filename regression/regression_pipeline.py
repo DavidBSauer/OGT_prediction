@@ -66,21 +66,23 @@ species_rank_dicts['class'].pop('', None)
 logger.info("found "+str(len(species_rank_dicts['superkingdom']['all']))+" total species with taxonomic assignment")
 	
 #parse/create train-test file
-testing = []
+train_test_valid = {}
 #if a train-test list does not exist, generate one. otherwise use the previously created list.
 if train_test_species_file == 'NONE':
 	logger.info('Assigning new Train-test list. Saving as train_test_list.txt')
-	f = open('train_test_list.txt','w')
+	f = open('train_test_valid_list.txt','w')
 	for species in species_OGT.keys():
-		if random.random() >0.8:
-			testing.append(species)
+		rand_value = random.random()
+		if rand_value >0.8:
+			train_test_valid[species] = 'test'
 			f.write(species+'\ttest\n')
 		else:
+			train_test_valid[species] = 'train'
 			f.write(species+'\ttrain\n')
 	f.close()
 else:
 	infile = open(train_test_species_file,'r')
-	testing = [line.split('\t')[0].strip() for line in infile.readlines() if line.split('\t')[1].strip() == 'test']
+	train_test_valid = {line.split('\t')[0].strip():line.split('\t')[1].strip() for line in infile.readlines()}
 	infile.close()
 
 #average redundant genome-features -> return species->feature->value dictionary. calculate genome and species histograms
@@ -117,18 +119,18 @@ for clade in ['all']:
 	#for all species, calculated with increasing feature classes
 	for analysis in analysis_sets:
 		logger.info('Running multiple linear regression for '+clade+' species and feature sets of '+'+'.join(analysis))
-		multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
-	
+		multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+
 	#limit OGT range to species with OGT >= 25C
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
 	valid_species = [species for species in species_rank_dicts[rank][clade] if species_OGT[species]>25]	
-	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_>25',valid_species,analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_>25',valid_species,analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 	#exclude genome size
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
-	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 logger.info('Calculate multiple linear regression of superkingdom specific data')
 for clade in ['Archaea','Bacteria']:
@@ -140,19 +142,18 @@ for clade in ['Archaea','Bacteria']:
 	#for specific superkingdoms, calculate regression using all features classes
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
-	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 	#limit OGT range to species with OGT >= 25C
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
 	valid_species = [species for species in species_rank_dicts[rank][clade] if species_OGT[species]>25]	
-	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_>25',valid_species,analysis,features,species_features,species_OGT,testing,rvalues,unit)
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_>25',valid_species,analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 	#exclude genome size
 	logger.info('Running multiple linear regression for '+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
-	multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis)+'_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
-
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 #run regression by clade
 for rank in [level for level in species_rank_dicts.keys() if not(level == 'superkingdom')]:
@@ -165,5 +166,5 @@ for rank in [level for level in species_rank_dicts.keys() if not(level == 'super
 			if len([x for x in rvalues.keys() if abs(rvalues[x])>0.3])>0: #run regression only if there are correlated features
 				analysis = analysis_sets[-1] #calculate regression using all features
 				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
-				multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,testing,rvalues,unit)
+				multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 logger.info('Exiting normally')		
