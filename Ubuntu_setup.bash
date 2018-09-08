@@ -9,7 +9,7 @@ cd External_tools
 #install tRNAscan-SE 
 echo "installing tRNAscan"
 sudo apt-get -y update
-sudo apt-get -y install gcc make perl automake
+sudo apt-get -y install gcc make perl automake zlib1g-dev python hmmer python3 python3-dev python3-pip build-essential python3-tk g++
 wget http://eddylab.org/infernal/infernal-1.1.2.tar.gz
 tar -zxvf infernal-1.1.2.tar.gz
 cd infernal-1.1.2
@@ -30,7 +30,6 @@ cd ..
 echo "tRNAscan-SE tRNAscan-SE" > ../external_tools.txt
 
 #installing bedtools
-sudo apt-get -y install zlib1g-dev python hmmer
 wget https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz
 tar -zxvf bedtools-2.27.1.tar.gz
 cd bedtools2
@@ -44,10 +43,6 @@ echo "installing barrnap"
 wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
 echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> ../external_tools.txt
-
-#install python
-echo "installing python"
-sudo apt-get -y install python3 python3-dev python3-pip build-essential python3-tk
 
 #install python packages
 echo "install python packages"
