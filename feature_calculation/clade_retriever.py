@@ -42,12 +42,16 @@ def clade(species_list):
 									taxa_info[name]['class'] = level['ScientificName']
 								if level['Rank'] == 'phylum':
 									taxa_info[name]['phylum'] = level['ScientificName']
+								if level['Rank'] == 'order':
+									taxa_info[name]['order'] = level['ScientificName']
+								if level['Rank'] == 'family':
+									taxa_info[name]['family'] = level['ScientificName']
 
 	g = open('species_taxonomic.txt','w')
-	g.write('\t'.join(['species','superkingdom','phylum','class'])+'\n')
+	g.write('\t'.join(['species','superkingdom','phylum','class','order','family'])+'\n')
 	for species in taxa_info.keys():
 		g.write(species)
-		for level in ['superkingdom','phylum','class']:
+		for level in ['superkingdom','phylum','class','order','family']:
 			if level in taxa_info[species].keys():
 				g.write('\t'+taxa_info[species][level])
 			else:
