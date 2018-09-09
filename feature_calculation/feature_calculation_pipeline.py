@@ -38,7 +38,8 @@ genomes = dict((str(rows[0]),str(rows[1])) for rows in reader)
 infile.close()    
 logger.info("found "+str(len(genomes.keys()))+" genomes")
 
-#sort the genomes by file size to optimize parallelization
+#only analyze those with taxonomic description, shuffle
+genomes = {x:genomes[x] for x in genomes.keys() if genomes[x] in species_clade.keys()}
 to_analyze = [(x,genomes[x]) for x in genomes.keys()]
 random.shuffle(to_analyze)
 
