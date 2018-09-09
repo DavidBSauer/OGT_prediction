@@ -84,7 +84,7 @@ for genome_addr in tqdm(addresses.keys(),unit='genome'):
 		logging.info('problem downloading '+genome_addr)
 	#avoid abusing Ensembl server. maximum of one genome per second
 	if time.time()-t0 < 1:
-		time.sleep(time.time()-t0)
+		time.sleep(1-(time.time()-t0))
 	t0= time.time()
 
 logging.info('of '+str(len(addresses.keys()))+' expected genomes, downloaded '+str(len(retrieved.keys())))
