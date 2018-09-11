@@ -73,7 +73,7 @@ def features_per_genome(inputs):
 	if tRNA_test:
 		#if tRNAs were predicted, calculate features
 		tRNA_data = tRNA.analysis(tRNA_seqs)
-		logger.info('Fount tRNA for '+genome_file)
+		logger.info('Found tRNA for '+genome_file)
 		result['tRNA']=tRNA_data
 	else:
 		logger.info('Cound not retrieve tRNAs for '+genome_file)
