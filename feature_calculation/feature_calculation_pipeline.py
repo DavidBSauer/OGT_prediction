@@ -69,14 +69,12 @@ def features_per_genome(inputs):
 	result['genomic'] = genomic.analysis((genome_file,species))
 	
 	#calculate tRNA features
+	logger.info('Finding tRNA for '+genome_file)
 	(tRNA_test,tRNA_seqs) = external_tools.tRNA((genome_file,species))
 	if tRNA_test:
 		#if tRNAs were predicted, calculate features
 		tRNA_data = tRNA.analysis(tRNA_seqs)
-		logger.info('Found tRNA for '+genome_file)
 		result['tRNA']=tRNA_data
-	else:
-		logger.info('Cound not retrieve tRNAs for '+genome_file)
 
 	#calculate rRNA features
 	logger.info('Finding rRNAs for '+genome_file)
@@ -101,16 +99,14 @@ def features_per_genome(inputs):
 			result['rRNA_assigned']=rRNA_assigned_data
 
 	#calculate ORF and proteome features
+	logger.info('Identifying and analyzing ORFs for '+genome_file)
 	(ORF_test,ORF_seqs) = external_tools.genemark((genome_file,species))
-	if ORF_test:	
-		logger.info('Analyzing ORFs for '+genome_file)	
+	if ORF_test:		
 		t_size = result['genomic']['Total Size']
 		ORF_data = ORFs.analysis(ORF_seqs,t_size)
 		protein_data = protein.analysis(ORF_seqs)
 		result['ORF']=ORF_data
 		result['protein']=protein_data
-	else:
-		logger.info('Problem getting ORFs for '+genome_file)	
 		
 	external_tools.cleanup((genome_file,species))
 	
