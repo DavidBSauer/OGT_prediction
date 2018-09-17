@@ -9,7 +9,7 @@ Run as:
 ```
 ./Ubuntu_setup.bash
 ```
-After installing GeneMarkS, edit the external_tools.txt file with absolute path to gmsn.pl. Then copy external_tools.txt into the feature_calculation and prediction directories.
+After installing GeneMarkS, edit the external_tools.txt file with absolute path to gmsn.pl for GeneMarkS. Then copy external_tools.txt into the feature_calculation and prediction directories.
 
 ## Usage
 ### Feature Calculation
