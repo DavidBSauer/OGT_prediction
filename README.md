@@ -28,7 +28,7 @@ python3 clade_retriever.py list_of_species_file
 ```
 python3 feature_calculation_pipeline.py genomes_retrieved.txt species_taxonomic.txt
 ```
-This will produce a series of files with the features for each genome.
+This will produce a series of files with the features for each genome. The feature files will be titled "Genome_XXX_features.txt" where XXX is the feature class (genomic, tRNA, rRNA, ORF, protein).
 
 ### Regression
 1. Calculate correlation of features to OGT and multiple linear regression models.
