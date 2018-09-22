@@ -15,11 +15,11 @@ ref_file, setting = sys.argv[1:3]
 logging.info('Reference file: '+ref_file)
 logging.info('Setting: '+setting)
 
-if not(setting in ['in_list','not_in_list']):
-	print("Setting must be 'in_list' or 'not_in_list. Quitting")
+if not(setting in ['IN','NOT_IN']):
+	print("Setting must be 'IN' or 'NOT_IN. Quitting")
 	logging.info('Improper setting. Quitting')
 	sys.exit()
-if setting == 'in_list':
+if setting == 'IN':
 	logging.info('Retrieving genomes of species in the provided file.')
 else:
 	logging.info('Retrieving genomes of species NOT in the provided file.')
@@ -48,7 +48,7 @@ else:
 	decoded = r.json()
 	for x in decoded:
 		species ='_'.join(x['species'].split('_')[0:2]).lower()
-		if setting == 'in_list':
+		if setting == 'IN':
 			if species in properly_formed:
 				root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
 				collection = '_'.join(x['dbname'].split('_')[0:3])
