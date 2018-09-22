@@ -3,15 +3,27 @@
 
 from urllib.request import urlopen
 import time
-from sys import argv
+import sys
 import logging
 import os
 from tqdm import tqdm
 import requests
-
-script, ref_file = argv
-
 logging.basicConfig(filename=str('genome_retriever.log'), level=logging.INFO)
+
+ref_file, setting = sys.argv[1:3]
+
+logging.info('Reference file: '+ref_file)
+logging.info('Setting: '+setting)
+
+if not(setting in ['in_list','not_in_list']):
+	print("Setting must be 'in_list' or 'not_in_list. Quitting")
+	logging.info('Improper setting. Quitting')
+	sys.exit()
+if setting == 'in_list':
+	logging.info('Retrieving genomes of species in the provided file.')
+else:
+	logging.info('Retrieving genomes of species NOT in the provided file.')
+
 logging.info("trying to open species-taxon file")
 infile = open(ref_file,'r')
 species_list = []
@@ -36,12 +48,20 @@ else:
 	decoded = r.json()
 	for x in decoded:
 		species ='_'.join(x['species'].split('_')[0:2]).lower()
-		if species in properly_formed:
-			root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
-			collection = '_'.join(x['dbname'].split('_')[0:3])
-			full_name = x['species']
-			directory = root_address+collection+'/'+full_name+'/dna/'
-			addresses[directory]=species
+		if setting == 'in_list':
+			if species in properly_formed:
+				root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
+				collection = '_'.join(x['dbname'].split('_')[0:3])
+				full_name = x['species']
+				directory = root_address+collection+'/'+full_name+'/dna/'
+				addresses[directory]=species
+		else:
+			if not(species in properly_formed):
+				root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
+				collection = '_'.join(x['dbname'].split('_')[0:3])
+				full_name = x['species']
+				directory = root_address+collection+'/'+full_name+'/dna/'
+				addresses[directory]=species
 
 logging.info('Number of genomes to retrieve: '+str(len(addresses.keys())))
 logging.info('Number of species to retrieve: '+str(len(list(set(addresses.values())))))
