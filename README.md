@@ -24,7 +24,7 @@ Species file needs to have one per line, with the species name the first thing o
 
 2. Download taxonomic classification for species of interest.
 ```
-python3 clade_retriever.py list_of_species_file
+python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 ```
 3. Calculate feature for each species of interest.
 ```
@@ -48,7 +48,7 @@ Species file needs to have one per line, with the species name the first thing o
 
 2. Download taxonomic classification for species of interest.
 ```
-python3 clade_retriever.py species_retrieved.txt
+python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 ```
 3. Run the prediction script to predict the OGT of each species.
 ```
