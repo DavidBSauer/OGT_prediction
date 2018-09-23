@@ -115,5 +115,11 @@ logging.info('from '+str(len(list(set(retrieved.values()))))+' species')
 
 g = open('genomes_retrieved.txt','w')
 for genome in retrieved.keys():
-		g.write(genome+'\t'+retrieved[genome]+'\n')
+	g.write(genome+'\t'+retrieved[genome]+'\n')
 g.close()
+
+if setting == 'NOT_IN':
+	g = open('species_retrieved.txt','w')
+	for species in list(set(retrieved.values())):
+		g.write(species+'\n')
+	g.close()
