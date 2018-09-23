@@ -16,9 +16,9 @@ After installing GeneMarkS, edit the external_tools.txt file with absolute path 
 ## Usage
 ### Feature Calculation
 Calculate features for each genome
-1. Download genomes for the species of interest.
+1. Download genomes for species IN a provided list.
 ```
-python3 genome_retriever.py list_of_species_file
+python3 genome_retriever.py list_of_species_file IN
 ```
 Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
 
@@ -40,9 +40,9 @@ python3 regression_pipeline.py species_trait_file training_testing_file species_
 
 ### Prediction
 Predict the OGT of a species (or many species) using the generated multiple linear regression models.
-1. Download genomes for the species of interest.
+1. Download genomes for species NOT IN a provided list.
 ```
-python3 genome_retriever.py list_of_species_file
+python3 genome_retriever.py list_of_species_file NOT_IN
 ```
 Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
 
