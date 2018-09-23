@@ -118,8 +118,7 @@ for genome in retrieved.keys():
 	g.write(genome+'\t'+retrieved[genome]+'\n')
 g.close()
 
-if setting == 'NOT_IN':
-	g = open('species_retrieved.txt','w')
-	for species in list(set(retrieved.values())):
-		g.write(species+'\n')
-	g.close()
+g = open('species_retrieved.txt','w')
+for species in list(set(retrieved.values())):
+	g.write(species+'\n')
+g.close()
