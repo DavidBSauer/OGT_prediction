@@ -61,8 +61,8 @@ for level in levels:
 	logger.info("for rank of "+level+" found "+str(len(species_rank_dicts[level].keys()))+" taxonomic groups")
 species_rank_dicts['superkingdom']['all']=list(set(all_species))
 #remove empty taxons
-species_rank_dicts['phylum'].pop('', None)
-species_rank_dicts['class'].pop('', None)
+for rank in species_rank_dicts.keys():
+	species_rank_dicts[rank].pop('', None)
 logger.info("found "+str(len(species_rank_dicts['superkingdom']['all']))+" total species with taxonomic assignment")
 	
 #parse/create train-test file
