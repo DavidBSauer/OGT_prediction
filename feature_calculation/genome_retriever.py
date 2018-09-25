@@ -50,21 +50,22 @@ else:
 		if len(x['species'].split('_'))>=2:
 			species ='_'.join(x['species'].split('_')[0:2]).lower()
 			(genus,species_name) = species.split('_')
-			if not(genus in ['','candidate','uncultured','unidentified','synthetic','candidatus','bacterium']) and not(species_name in ['sp','group','candidatus','bacterium','proteobacterium','endosymbiont','archaeon','cluster']):
-				if setting == 'IN':
-					if species in properly_formed:
-						root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
-						collection = '_'.join(x['dbname'].split('_')[0:3])
-						full_name = x['species']
-						directory = root_address+collection+'/'+full_name+'/dna/'
-						addresses[directory]=species
-				else:
-					if not(species in properly_formed):
-						root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
-						collection = '_'.join(x['dbname'].split('_')[0:3])
-						full_name = x['species']
-						directory = root_address+collection+'/'+full_name+'/dna/'
-						addresses[directory]=species
+			if not(genus in ['','candidate','uncultured','unidentified','synthetic','candidatus','bacterium','marine']) and not(species_name in ['sp','group','candidatus','bacterium','proteobacterium','endosymbiont','archaeon','cluster','producing','gamma']):
+				if not 'bacterium' in species_name:
+					if setting == 'IN':
+						if species in properly_formed:
+							root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
+							collection = '_'.join(x['dbname'].split('_')[0:3])
+							full_name = x['species']
+							directory = root_address+collection+'/'+full_name+'/dna/'
+							addresses[directory]=species
+					else:
+						if not(species in properly_formed):
+							root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
+							collection = '_'.join(x['dbname'].split('_')[0:3])
+							full_name = x['species']
+							directory = root_address+collection+'/'+full_name+'/dna/'
+							addresses[directory]=species
 
 logging.info('Number of genomes to retrieve: '+str(len(addresses.keys())))
 logging.info('Number of species to retrieve: '+str(len(list(set(addresses.values())))))
