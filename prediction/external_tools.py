@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 import subprocess
 import logging
-logger = logging.getLogger('feature_calculation')
+logger = logging.getLogger('prediction')
 from BCBio import GFF
 import gzip
 import tarfile
