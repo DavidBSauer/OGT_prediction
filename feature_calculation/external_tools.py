@@ -31,9 +31,9 @@ def versions():
 	p = subprocess.Popen([commands['barrnap']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	logger.info('barrnap version info: '+err.decode('utf-8').strip())
-	p = subprocess.Popen([commands['genemark']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	p = subprocess.Popen([commands['prodigal']+' --v'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	logger.info('genemark version info: '+out.decode('utf-8').strip())
+	logger.info('prodigal version info: '+out.decode('utf-8').strip())
 	logger.info('Numpy version: '+np.__version__)
 	import Bio
 	logger.info('Biopython version: '+Bio.__version__)
@@ -123,10 +123,10 @@ def prodigal(inputs):
 		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/mrna.fna'):
 			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/mrna.fna','fasta'))
 		else:
-			logging.info('could not find predicted ORFs for '+genome_file)
+			logger.info('could not find predicted ORFs for '+genome_file)
 			return (False,None)
 	else:
-		logging.info('error on '+genome_file+' prodigal step with a message of\n'+err)
+		logger.info('error on '+genome_file+' prodigal step with a message of\n'+err)
 		return (False,None)
 
 #predict rRNA sequences using barrnap

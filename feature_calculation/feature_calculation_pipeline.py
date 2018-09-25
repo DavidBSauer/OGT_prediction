@@ -100,7 +100,7 @@ def features_per_genome(inputs):
 
 	#calculate ORF and proteome features
 	logger.info('Identifying and analyzing ORFs for '+genome_file)
-	(ORF_test,ORF_seqs) = external_tools.genemark((genome_file,species))
+	(ORF_test,ORF_seqs) = external_tools.prodigal((genome_file,species))
 	if ORF_test:		
 		t_size = result['genomic']['Total Size']
 		ORF_data = ORFs.analysis(ORF_seqs,t_size)
