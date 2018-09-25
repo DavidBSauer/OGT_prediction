@@ -71,11 +71,19 @@ def GC(data):
 
 def t_size(data):
 	#calculate the total size of the genome
-	length = 0.0
+	#ignore Ns
+	A=0.0
+	G=0.0
+	T=0.0
+	C=0.0
 	for x in data:
-		input=data[x]
-		length = length+len(input)
-	return length
+		input = data[x]
+		A = A+float(input.seq.count('A'))
+		G =	G+float(input.seq.count('G'))
+		T = T+float(input.seq.count('T'))
+		C = C+float(input.seq.count('C'))
+	total = A+G+T+C
+	return total
 	
 def j2(data):
 	#calculate the J2 metric of the genome

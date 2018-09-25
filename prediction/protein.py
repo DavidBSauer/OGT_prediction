@@ -7,7 +7,7 @@ AAs = ['A','C','D','E','F','G','H','I','K','L','M','N','P','Q','R','S','T','V','
 def analysis(inputs):
 	#calculate all proteome feature for a genome
 	results ={}
-	AA_counts = AA_count(inputs)
+	(AA_counts,results['Length']) = lenght(inputs)
 	results['AA']=AA_freq(AA_counts)
 	results['Charged']=percent_charged(AA_counts)
 	results['Polar-Uncharged']=percent_polar_uncharged(AA_counts)
@@ -21,7 +21,6 @@ def analysis(inputs):
 	results['IVYWREL']=percent_IVYWREL(AA_counts)
 	results['IVWL']=percent_IVWL(AA_counts)
 	results['KVYWREP']=percent_KVYWREP(AA_counts)
-	results['Length']=length(inputs)
 	results['GARP']=percent_GARP(AA_counts)
 	results['MFILVWYERP']=percent_MFILVWYERP(AA_counts)
 	results['ILVYER']=percent_ILVYER(AA_counts)
@@ -40,25 +39,19 @@ def analysis(inputs):
 		else: 
 			results2[key] = results[key]
 	return results2
-	
-def length(inputs):
-	#calculate the average protein length
-	lengths =0.0
-	counts =0.0
-	for input in inputs:
-		protein = inputs[input].seq.translate()
-		lengths = lengths+len(protein)
-		counts = counts+1
-	return lengths/counts
+
 	
 def AA_count(inputs):
 	#calculate the counts for each AA in the proteome
-	counts = {x:0.0 for x in AAs}
+	AA_counts = {x:0.0 for x in AAs}
+	count = 0
 	for input in inputs:
+		count = count +1
 		protein = inputs[input].seq.translate()
 		for x in AAs:	
-			counts[x]=counts[x]+protein.count(x)
-	return counts
+			AA_counts[x]=AA_counts[x]+protein.count(x)
+	mean_length = sum(AA_counts.values())/count
+	return (AA_counts,mean_length)
 		
 def AA_freq(AA_counts):
 	#calculate the average AA fraction in the proteome

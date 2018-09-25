@@ -15,13 +15,6 @@ def analysis(data):
 			results2[key] = results[key]
 	return results2
 
-def number(data):
-	#calculate the number of tRNA sequences
-	count = 0.0
-	for x in data:
-		count = count+1
-	return count
-
 def GC(data):
 	#calculate the GC fraction of the tRNA sequences
 	#ignore Ns
