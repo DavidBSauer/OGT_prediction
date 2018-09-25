@@ -56,3 +56,5 @@ echo "prodigal prodigal" >> ../external_tools.txt
 #install python packages
 echo "install python packages"
 sudo pip3 install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib matplotlib-venn
+
+echo "finished"
