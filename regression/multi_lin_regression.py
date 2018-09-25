@@ -107,6 +107,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				p = mp.Pool()
 				results = p.map(train,test_features)
 				p.close()
+				p.join()
 
 				#find the best new regression
 				best_return = results[0]

@@ -44,6 +44,7 @@ def calc(rvalues,all_features,species_features,feature_order,clade):
 	p = mp.Pool()
 	results = p.map(cc,pairs)
 	p.close()
+	p.join()
 	
 	#create a 2D dictionary of absolute r-values
 	for (feature1,feature2,r_value) in results:

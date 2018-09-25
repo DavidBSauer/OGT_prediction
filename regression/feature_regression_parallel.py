@@ -96,6 +96,7 @@ def rs(features,species_features,species_OGTs,rank,clade,valid_species,unit):
 	p = mp.Pool()
 	results = p.map(r_calc,feature_list)
 	p.close()
+	p.join()
 	'''
 	#run single thread if getting glyph error
 	results = [r_calc(x) for x in feature_list]

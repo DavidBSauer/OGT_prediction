@@ -87,6 +87,7 @@ def many_genomes(genomes):
 	p = mp.Pool()
 	results = p.map(features_per_genome, to_analyze)
 	p.close()
+	p.join()
 	'''
 	#calculate single thread for troubleshooting
 	results =[]

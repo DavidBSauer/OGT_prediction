@@ -117,6 +117,7 @@ def features_per_genome(inputs):
 p = mp.Pool()
 results = p.map(features_per_genome, to_analyze)
 p.close()
+p.join()
 '''
 #single thread for trouble shooting
 results =[]
