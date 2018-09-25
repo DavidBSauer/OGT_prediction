@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 import subprocess
 import logging
-logger = logging.getLogger('prediction')
+logger = logging.getLogger('feature_calculation')
 from BCBio import GFF
 import gzip
 import tarfile
@@ -111,32 +111,22 @@ def tRNA(inputs):
 		logger.info('error with tRNAscan for '+genome_file+' with a message of \n'+err)
 		return (False,None)
 
-#using GeneMark ORFfinder
-def genemark(inputs):
-	(genome_file,species) = inputs
+#using prodigal ORFfinder
+def prodigal(inputs):
+	(genome_file,species) = inputs	
 	folder = '_'.join(genome_file.split('.')[:-1])
-	os.mkdir('./output/genomes/'+species+'/'+folder+'/genemark')
-	os.chdir('./output/genomes/'+species+'/'+folder+'/genemark/')
-	#run gmsn.pl
-	#settings: --prok prokaryotic, --combine model parameters
 	global commands
-	command = commands['genemark']+' --prok --combine --gm --fnn ../'+genome_file
+	command = commands['prodigal']+' -i ./output/genomes/'+species+'/'+folder+'/'+genome_file+' -d ./output/genomes/'+species+'/'+folder+'/mrna.fna -o ./output/genomes/'+species+'/'+folder+'/prodigal_output.gbk'
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
-	out = out.decode('utf-8')
-	err = err.decode('utf-8')	
-	if err == '': #catching errors for genomes that fail in genemark analysis
-		#return True if no errors produced by gmhmmp
-		os.chdir('../../../../../')
-		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/genemark/'+genome_file+'.fnn'):
-			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/genemark/'+genome_file+'.fnn','fasta'))
+	if not('Error:' in err): #prodigal uses stderr for all output, need to catch errors
+		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/mrna.fna'):
+			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/mrna.fna','fasta'))
 		else:
-			logger.info('could not find predicted ORFs for '+genome_file)
+			logging.info('could not find predicted ORFs for '+genome_file)
 			return (False,None)
 	else:
-		#gmsn.pl produced and error		
-		logger.info('error on '+genome_file+' gmsn.pl step with a message of\n'+err)
-		os.chdir('../../../../../')
+		logging.info('error on '+genome_file+' prodigal step with a message of\n'+err)
 		return (False,None)
 
 #predict rRNA sequences using barrnap

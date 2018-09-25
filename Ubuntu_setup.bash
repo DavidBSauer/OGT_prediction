@@ -45,14 +45,14 @@ wget https://github.com/tseemann/barrnap/archive/0.9.tar.gz
 tar -zxvf 0.9.tar.gz
 echo "barrnap $PWD/barrnap-0.9/bin/barrnap" >> ../external_tools.txt
 
+#installing Prodigal
+echo "installing prodigal"
+git clone https://github.com/hyattpd/Prodigal
+cd Prodigal
+sudo make install
+cd ..
+echo "prodigal prodigal" >> ../external_tools.txt
+
 #install python packages
 echo "install python packages"
 sudo pip3 install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib matplotlib-venn
-
-#install GeneMarkS
-#go to exon.gatech.edu/GeneMark/license_download.cgi
-#download Genemark-S and the 64_bit key
-echo "Don't forget:"
-echo "1. download and install GeneMarkS to External_tools"
-echo "2. edit the external_tools.txt file with the absolute path to gmsn.pl"
-echo "genemark [absolute_path_to_gmsn.pl]" >> ../external_tools.txt
