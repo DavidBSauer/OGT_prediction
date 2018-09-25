@@ -37,6 +37,7 @@ if not os.path.exists('./figures/individual_features'):
 
 def r_calc(inputs):
 	(feature,species_features,species_OGTs,rank,clade,valid_species,unit) = inputs
+	print(feature)	
 	if not os.path.exists('./figures/individual_features/'+rank):
 	   os.makedirs('./figures/individual_features/'+rank)
 	if not os.path.exists('./files/individual_features/'+rank):
@@ -90,12 +91,14 @@ def r_calc(inputs):
 def rs(features,species_features,species_OGTs,rank,clade,valid_species,unit):
 	#create a list of values needed for analysis
 	feature_list = [(feature,species_features,species_OGTs,rank,clade,valid_species,unit) for feature in features]
-	
+	'''
 	#run in parallel
 	p = mp.Pool()
 	results = p.map(r_calc,feature_list)
 	p.close()
-	
+	'''
+	#run single thread if getting glyph error
+	results = [r_calc(x) for x in feature_list]
 	#write out the feature correlation
 	feature_rs ={x[0]:x[1] for x in results if not(x[1] == None)}
 	sorted_rs = reversed(sorted(feature_rs, key=lambda dict_key: abs(feature_rs[dict_key])))

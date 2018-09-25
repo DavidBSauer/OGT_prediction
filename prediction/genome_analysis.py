@@ -21,9 +21,10 @@ def setup(sc_input):
 
 #Analyze features per genome
 def features_per_genome(inputs):
-	(genome_file,species)=inputs
+	(genome_file,species) = inputs
 	result = {}
 	result['species']=species
+	
 	#create folders and decompress
 	genome_file = external_tools.setup((genome_file,species))	
 	
@@ -32,21 +33,21 @@ def features_per_genome(inputs):
 	result['genomic'] = genomic.analysis((genome_file,species))
 	
 	#calculate tRNA features
+	logger.info('Finding tRNA for '+genome_file)
 	(tRNA_test,tRNA_seqs) = external_tools.tRNA((genome_file,species))
 	if tRNA_test:
 		#if tRNAs were predicted, calculate features
 		tRNA_data = tRNA.analysis(tRNA_seqs)
-		logger.info('Found tRNA for '+genome_file)
 		result['tRNA']=tRNA_data
-	else:
-		logger.info('Cound not retrieve tRNAs for '+genome_file)
 
 	#calculate rRNA features
 	logger.info('Finding rRNAs for '+genome_file)
 	#run barrnap using both archaea and bacteria hmm models
 	domain_results = external_tools.rRNA((genome_file,species))
+
 	#using previous assigned domain
-	domain_assigned = species_clade[species]
+	global species_clade
+	domain_assigned = species_clade[species]['superkingdom']
 	if domain_results[domain_assigned]:
 		(rRNA_assigned_test,rRNA_assigned_seq) = external_tools.rRNA_seq((genome_file,species,domain_assigned,'assigned'))
 		if rRNA_assigned_test:		
@@ -54,22 +55,22 @@ def features_per_genome(inputs):
 			result['rRNA']=rRNA_assigned_data
 
 	#calculate ORF and proteome features
+	logger.info('Identifying and analyzing ORFs for '+genome_file)
 	(ORF_test,ORF_seqs) = external_tools.genemark((genome_file,species))
-	if ORF_test:	
-		logger.info('Analyzing ORFs for '+genome_file)	
+	if ORF_test:		
 		t_size = result['genomic']['Total Size']
 		ORF_data = ORFs.analysis(ORF_seqs,t_size)
 		protein_data = protein.analysis(ORF_seqs)
 		result['ORF']=ORF_data
 		result['protein']=protein_data
-	else:
-		logger.info('Problem getting ORFs for '+genome_file)	
 		
 	external_tools.cleanup((genome_file,species))
+	
 	return (genome_file,result)
 
 def many_genomes(genomes):
 	to_analyze = [(genome,genomes[genome]) for genome in genomes]
+	random.shuffle(to_analyze)
 	print('analyzing genomes')
 	#make folders for output
 	if not(os.path.isdir('./output')):	
@@ -77,7 +78,7 @@ def many_genomes(genomes):
 	if not(os.path.isdir('./output/genomes')):	
 		os.mkdir('./output/genomes')
 
-	for species in [x[1] for x in to_analyze]:
+	for species in list(set([x[1] for x in to_analyze])):
 		#make a folder based on the genome name 
 		if not(os.path.isdir('./output/genomes/'+species)):	
 			os.mkdir('./output/genomes/'+species)
@@ -89,7 +90,7 @@ def many_genomes(genomes):
 	'''
 	#calculate single thread for troubleshooting
 	results =[]
-	for x in tqdm(sortedgenomes,unit='genome'):
+	for x in tqdm(to_analyze,unit='genome'):
 		results.append(features_per_genome(x))
 	'''
 	results = {x[0]:x[1] for x in results}

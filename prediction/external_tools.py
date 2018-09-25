@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 import subprocess
 import logging
-logger = logging.getLogger('prediction')
+logger = logging.getLogger('feature_calculation')
 from BCBio import GFF
 import gzip
 import tarfile
@@ -42,7 +42,7 @@ def versions():
 	logger.info('Python version: '+sys.version)
 	del(sys)
 	import platform
-	logger.info('Platform version: '+platform.platform())
+	logger.info('Platform: '+platform.platform())
 	del(platform)
 
 versions()
@@ -214,7 +214,20 @@ def rRNA_seq(inputs):
 	out = out.decode('utf-8')
 	err = err.decode('utf-8')
 	if os.path.isfile('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'.fa'):
-		seqs = SeqIO.index('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'.fa','fasta')
+		#handle if there are multiple rRNA predicted
+		f = open('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'.fa','r')
+		g = open('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'_renamed.fa','w')
+		count =1
+		for line in f.readlines():
+			if line[0] == '>':
+				g.write(line.replace('>','>'+str(count)+'_'))
+				count = count+1
+			else:
+				g.write(line)
+		f.close()
+		g.close()
+		
+		seqs = SeqIO.index('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'_renamed.fa','fasta')
 		if len(seqs) >0:
 			return (True,seqs)
 		else:

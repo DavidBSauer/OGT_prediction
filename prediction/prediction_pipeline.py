@@ -48,21 +48,25 @@ for line in infile.readlines():
 			taxonomic_info[species][ranks[x]]=taxons[x]
 infile.close()
 
-#calculate genomic features for each genome
+#read in the genomes available to be analyzed
 to_analyze ={}
 f =open(genome_file,'r')
 for line in f.readlines():
 	to_analyze[line.split('\t')[0].strip()]=line.split('\t')[1].strip()
 f.close()
+
+#find the genomes and species to be analyzed
 logger.info('initial number of species to be predicted: '+str(len(list(set(to_analyze.values())))))
-
 logger.info('initial number of genomes to be analyzed: '+str(len(to_analyze.keys())))
-to_analyze_tax = {species:taxonomic_info[species]['superkingdom'] for species in taxonomic_info.keys() if (('superkingdom' in taxonomic_info[species].keys()) and (taxonomic_info[species]['superkingdom'] in ['Bacteria','Archaea']) and (species in to_analyze.values()))} #analyze only bacteria and archaea, and require that the superkingdom be assigned
-logger.info('number of species to be predicted: '+str(len(list(set(to_analyze_tax.keys())))))
-genome_analysis.setup(to_analyze_tax)
-logger.info('number of genomes to be analyzed: '+str(len([genome for genome in to_analyze.keys() if to_analyze[genome] in to_analyze_tax.keys()])))
-genome_features = genome_analysis.many_genomes(to_analyze)
+useful_tax_info = {species:taxonomic_info[species] for species in taxonomic_info.keys() if 'superkingdom' in taxonomic_info[species].keys()} #keep only species with an assigned superkingdom
+useful_tax_info = {species:useful_tax_info[species] for species in useful_tax_info.keys() if useful_tax_info[species]['superkingdom'] in ['Bacteria','Archaea']} #keep only species which are archaea or bacteria
+to_analyze = {genome:to_analyze[genome] for genome in to_analyze.keys() if to_analyze[genome] in useful_tax_info.keys()} #analyze only those genomes with available species taxonomic information
+logger.info('number of species to be predicted: '+str(len(list(set(to_analyze.values())))))
+logger.info('number of genomes to be analyzed: '+str(len(to_analyze.keys())))
 
+#calculate genome features
+genome_analysis.setup(useful_tax_info)
+genome_features = genome_analysis.many_genomes(to_analyze)
 #reduce genome features to species features
 species_features = genome_to_species.species(genome_features)
 logger.info('number of species with features calculated: '+str(len(species_features.keys())))
