@@ -4,14 +4,14 @@ Scripts for calculating features from genomic sequences, multiple linear regress
 See: Sauer & Wang. Prediction of Optimal Growth Temperature using only Genome Derived Features (2018) https://doi.org/10.1101/273094
 
 ## Requirements
-Requires: Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, GeneMarkS.
+Requires: Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, Prodigal.
 
-In practice, there is a bash script "Ubuntu_setup.bash" that will install everything except GeneMarkS automatically. (Tested on Ubuntu 18.04 LTS) 
+In practice, there is a bash script "Ubuntu_setup.bash" that will install everything.
+
 Run as: 
 ```
 ./Ubuntu_setup.bash
 ```
-After installing GeneMarkS, edit the external_tools.txt file with absolute path to gmsn.pl. Then copy external_tools.txt into the feature_calculation and prediction directories.
 
 ## Usage
 ### Feature Calculation
