@@ -23,11 +23,12 @@ def GC(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x]
+		input_seq = input_seq.seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return (G+C)/total
 	
@@ -40,10 +41,11 @@ def nucleotide_freq(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x]
+		input_seq = input_seq.seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return {'A':A/total,'C':C/total,'G':G/total,'T':T/total}

@@ -7,7 +7,7 @@ AAs = ['A','C','D','E','F','G','H','I','K','L','M','N','P','Q','R','S','T','V','
 def analysis(inputs):
 	#calculate all proteome feature for a genome
 	results ={}
-	(AA_counts,results['Length']) = lenght(inputs)
+	(AA_counts,results['Length']) = AA_count(inputs)
 	results['AA']=AA_freq(AA_counts)
 	results['Charged']=percent_charged(AA_counts)
 	results['Polar-Uncharged']=percent_polar_uncharged(AA_counts)
@@ -47,7 +47,7 @@ def AA_count(inputs):
 	count = 0
 	for input in inputs:
 		count = count +1
-		protein = inputs[input].seq.translate()
+		protein = inputs[input].seq
 		for x in AAs:	
 			AA_counts[x]=AA_counts[x]+protein.count(x)
 	mean_length = sum(AA_counts.values())/count

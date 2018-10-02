@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger('prediction')
+logger = logging.getLogger('feature_calculation')
 
 def analysis(data,t_size):
 	#calculate all features
@@ -40,24 +40,24 @@ def length(data):
 	#calculate average ORF length
 	length = 0.0
 	for x in data:
-		input =data[x]
-		length = length+len(input)
+		input_seq =data[x]
+		length = length+len(input_seq)
 	return length/number(data)
 	
 def coding_noncoding(data,t_size):
 	#calculate ratio of coding/noncoding 
 	length =  0.0
 	for x in data:
-		input = data[x]
-		length = length+len(input)
+		input_seq = data[x]
+		length = length+len(input_seq)
 	return length/(2*t_size-length)
 	
 def coding(data,t_size):
 	#calculate fraction of the genome that is coding
 	length =0.0
 	for x in data:
-		input = data[x]
-		length = length+len(input)
+		input_seq = data[x]
+		length = length+len(input_seq)
 	return length/t_size
 
 def nucleotide_freq(data):
@@ -68,11 +68,12 @@ def nucleotide_freq(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x]
+		input_seq = input_seq.seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return {'A':A/total,'C':C/total,'G':G/total,'T':T/total}
 
@@ -83,10 +84,10 @@ def codon(data):
 	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
-		input = data[x].seq
-		input = [input[i:i+3] for i in range(0, len(input), 3)]
+		input_seq = data[x].seq
+		input_seq = [input_seq[i:i+3] for i in range(0, len(input_seq), 3)]
 		for y in keys:
-			for z in input:
+			for z in input_seq:
 				if y == z:
 					counts[y] = counts[y]+1
 	for x in keys:
@@ -99,9 +100,9 @@ def start_codon(data):
 	total = 0.0
 	keys = counts.keys()
 	for x in data:
-		input = data[x].seq[:3]
+		input_seq = data[x].seq[:3]
 		for y in keys:
-			if y == input:
+			if y == input_seq:
 				counts[y] = counts[y]+1
 	for x in keys:
 		total = total + counts[x]
@@ -113,9 +114,9 @@ def stop_codon(data):
 	total = 0.0
 	keys = counts.keys()
 	for x in data:
-		input = data[x].seq[-3:]
+		input_seq = data[x].seq[-3:]
 		for y in keys:
-			if y == input:
+			if y == input_seq:
 				counts[y] = counts[y]+1
 	for x in keys:
 		total = total + counts[x]
@@ -130,11 +131,12 @@ def GC(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x]
+		input_seq = input_seq.seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return (G+C)/total
 
@@ -146,11 +148,12 @@ def AG(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x]
+		input_seq = input_seq.seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return (G+A)/total
 
@@ -163,9 +166,10 @@ def dinucleotide_freq(data):
 	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
-		input = data[x]
+		input_seq = data[x]
+		input_seq = input_seq.seq
 		for y in keys:
-			counts[y] = counts[y]+float(input.seq.count(y))
+			counts[y] = counts[y]+float(input_seq.count(y))
 	for x in keys:
 		total = total + counts[x]
 	return {x:counts[x]/total for x in keys}

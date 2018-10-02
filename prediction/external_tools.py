@@ -112,21 +112,38 @@ def tRNA(inputs):
 		return (False,None)
 
 #using prodigal ORFfinder
-def prodigal(inputs):
+def ORF(inputs):
 	(genome_file,species) = inputs	
 	folder = '_'.join(genome_file.split('.')[:-1])
 	global commands
-	command = commands['prodigal']+' -i ./output/genomes/'+species+'/'+folder+'/'+genome_file+' -d ./output/genomes/'+species+'/'+folder+'/mrna.fna -o ./output/genomes/'+species+'/'+folder+'/prodigal_output.gbk'
+	command = commands['prodigal']+' -i ./output/genomes/'+species+'/'+folder+'/'+genome_file+' -d ./output/genomes/'+species+'/'+folder+'/mrna.fna -a ./output/genomes/'+species+'/'+folder+'/translated.faa -o ./output/genomes/'+species+'/'+folder+'/prodigal_output.gbk'
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	if not('Error:' in err): #prodigal uses stderr for all output, need to catch errors
 		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/mrna.fna'):
-			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/mrna.fna','fasta'))
+			if len(SeqIO.index('./output/genomes/'+species+'/'+folder+'/mrna.fna','fasta'))>0:
+				return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/mrna.fna','fasta'))
+			else:
+				logger.info('Predicted zero ORFs for '+genome_file)
+				return (False,None)
 		else:
 			logger.info('could not find predicted ORFs for '+genome_file)
 			return (False,None)
 	else:
 		logger.info('error on '+genome_file+' prodigal step with a message of\n'+err)
+		return (False,None)
+
+def proteins(inputs):
+	(genome_file,species) = inputs	
+	folder = '_'.join(genome_file.split('.')[:-1])
+	if os.path.isfile('./output/genomes/'+species+'/'+folder+'/translated.faa'):
+		if len(SeqIO.index('./output/genomes/'+species+'/'+folder+'/translated.faa','fasta'))>0:
+			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/translated.faa','fasta'))
+		else:
+			logger.info('Predicted zero proteins for '+genome_file)
+			return (False,None)
+	else:
+		logger.info('could not find predicted proteins for '+genome_file)
 		return (False,None)
 
 #predict rRNA sequences using barrnap

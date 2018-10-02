@@ -30,11 +30,11 @@ def nucleotide_freq(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x].seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return {'A':A/total,'C':C/total,'G':G/total,'T':T/total}
 
@@ -46,9 +46,9 @@ def dinucleotide_freq(data):
 	keys = list(counts.keys())
 	keys.sort()
 	for x in data:
-		input = data[x]
+		input_seq = data[x].seq
 		for y in keys:
-			counts[y] = counts[y]+float(input.seq.count(y))
+			counts[y] = counts[y]+float(input_seq.count(y))
 	for x in keys:
 		total = total + counts[x]
 	return {x:counts[x]/total for x in keys}
@@ -61,11 +61,11 @@ def GC(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x].seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return (G+C)/total
 
@@ -77,11 +77,11 @@ def t_size(data):
 	T=0.0
 	C=0.0
 	for x in data:
-		input = data[x]
-		A = A+float(input.seq.count('A'))
-		G =	G+float(input.seq.count('G'))
-		T = T+float(input.seq.count('T'))
-		C = C+float(input.seq.count('C'))
+		input_seq = data[x].seq
+		A = A+float(input_seq.count('A'))
+		G = G+float(input_seq.count('G'))
+		T = T+float(input_seq.count('T'))
+		C = C+float(input_seq.count('C'))
 	total = A+G+T+C
 	return total
 	
@@ -92,15 +92,15 @@ def j2(data):
 	YR = 0.0
 	RY = 0.0
 	for x in data:
-		input = data[x]
+		input_seq = data[x].seq
 		for y in ['TT','CC','TC','CT']:
-			YY = YY+input.seq.count(y)
+			YY = YY+input_seq.count(y)
 		for y in ['AA','GG','AG','GA']:
-			RR = RR+input.seq.count(y)
+			RR = RR+input_seq.count(y)
 		for y in ['TA','TG','CA','CG']:
-			YR = YR+input.seq.count(y)
+			YR = YR+input_seq.count(y)
 		for y in ['AT','AC','GT','GC']:
-			RY = RY+input.seq.count(y)
+			RY = RY+input_seq.count(y)
 	total = YY+RR+YR+RY
 	YY = YY/total
 	RR = RR/total

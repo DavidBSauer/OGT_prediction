@@ -37,32 +37,28 @@ def features_per_genome(inputs):
 	(tRNA_test,tRNA_seqs) = external_tools.tRNA((genome_file,species))
 	if tRNA_test:
 		#if tRNAs were predicted, calculate features
-		tRNA_data = tRNA.analysis(tRNA_seqs)
-		result['tRNA']=tRNA_data
+		result['tRNA']=tRNA.analysis(tRNA_seqs)
 
 	#calculate rRNA features
 	logger.info('Finding rRNAs for '+genome_file)
-	#run barrnap using both archaea and bacteria hmm models
 	domain_results = external_tools.rRNA((genome_file,species))
-
 	#using previous assigned domain
 	global species_clade
 	domain_assigned = species_clade[species]['superkingdom']
 	if domain_results[domain_assigned]:
 		(rRNA_assigned_test,rRNA_assigned_seq) = external_tools.rRNA_seq((genome_file,species,domain_assigned,'assigned'))
 		if rRNA_assigned_test:		
-			rRNA_assigned_data = rRNA.analysis(rRNA_assigned_seq)
-			result['rRNA']=rRNA_assigned_data
+			result['rRNA']=rRNA.analysis(rRNA_assigned_seq)
 
 	#calculate ORF and proteome features
 	logger.info('Identifying and analyzing ORFs for '+genome_file)
 	(ORF_test,ORF_seqs) = external_tools.prodigal((genome_file,species))
 	if ORF_test:		
 		t_size = result['genomic']['Total Size']
-		ORF_data = ORFs.analysis(ORF_seqs,t_size)
-		protein_data = protein.analysis(ORF_seqs)
-		result['ORF']=ORF_data
-		result['protein']=protein_data
+		result['ORF']= ORFs.analysis(ORF_seqs,t_size)
+		(protein_test,protein_seqs) = external_tools.proteins((genome_file,species))
+		if protein_test:
+			result['protein']=protein.analysis(protein_seqs)
 		
 	external_tools.cleanup((genome_file,species))
 	
