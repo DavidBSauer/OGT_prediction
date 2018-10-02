@@ -66,7 +66,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 		#find the most correlated feature
 		seed_feature = list(all_features.items())[0]
 		for feature in list(all_features.items())[1:]:
-			if feature[1]>seed_feature[1]: #the most positively correlated feature
+			if abs(feature[1])>abs(seed_feature[1]): #the most positively correlated feature
 				seed_feature = feature
 		seed_feature = seed_feature[0]
 		all_features = list(all_features.keys())
