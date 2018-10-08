@@ -70,7 +70,7 @@ train_test_valid = {}
 #if a train-test list does not exist, generate one. otherwise use the previously created list.
 if train_test_species_file == 'NONE':
 	logger.info('Assigning new Train-test list. Saving as train_test_list.txt')
-	f = open('train_test_valid_list.txt','w')
+	f = open('train_test_list.txt','w')
 	for species in species_OGT.keys():
 		rand_value = random.random()
 		if rand_value >0.8:

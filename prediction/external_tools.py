@@ -119,6 +119,8 @@ def ORF(inputs):
 	command = commands['prodigal']+' -i ./output/genomes/'+species+'/'+folder+'/'+genome_file+' -d ./output/genomes/'+species+'/'+folder+'/mrna.fna -a ./output/genomes/'+species+'/'+folder+'/translated.faa -o ./output/genomes/'+species+'/'+folder+'/prodigal_output.gbk'
 	p = subprocess.Popen([command],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
+	out = out.decode('utf-8')
+	err = err.decode('utf-8')
 	if not('Error:' in err): #prodigal uses stderr for all output, need to catch errors
 		if os.path.isfile('./output/genomes/'+species+'/'+folder+'/mrna.fna'):
 			if len(SeqIO.index('./output/genomes/'+species+'/'+folder+'/mrna.fna','fasta'))>0:

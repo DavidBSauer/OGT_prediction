@@ -37,7 +37,6 @@ if not os.path.exists('./figures/individual_features'):
 
 def r_calc(inputs):
 	(feature,species_features,species_OGTs,rank,clade,valid_species,unit) = inputs
-	print(feature)	
 	if not os.path.exists('./figures/individual_features/'+rank):
 	   os.makedirs('./figures/individual_features/'+rank)
 	if not os.path.exists('./files/individual_features/'+rank):
