@@ -16,7 +16,7 @@ logging.info('Reference file: '+ref_file)
 logging.info('Setting: '+setting)
 
 if not(setting in ['IN','NOT_IN']):
-	print("Setting must be 'IN' or 'NOT_IN. Quitting")
+	print("Setting must be 'IN' or 'NOT_IN'. Quitting")
 	logging.info('Improper setting. Quitting')
 	sys.exit()
 if setting == 'IN':
