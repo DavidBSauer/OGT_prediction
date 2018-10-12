@@ -47,7 +47,7 @@ def clade(species_list):
 								if level['Rank'] == 'family':
 									taxa_info[name]['family'] = level['ScientificName']
 
-	g = open('species_taxonomic_prokaryotes.txt','w')
+	g = open('species_taxonomic.txt','w')
 	g.write('\t'.join(['species','superkingdom','phylum','class','order','family'])+'\n')
 	for species in taxa_info.keys():
 		if (('superkingdom' in taxa_info[species]) and (taxa_info[species]['superkingdom'] in ['Archaea','Bacteria'])):
