@@ -102,7 +102,7 @@ def rs(features,species_features,species_OGTs,rank,clade,valid_species,unit):
 	#write out the feature correlation
 	feature_rs ={x[0]:x[1] for x in results if not(x[1] == None)}
 	sorted_rs = reversed(sorted(feature_rs, key=lambda dict_key: abs(feature_rs[dict_key])))
-	gg = open('./files/'+clade+'_feature_correlation.txt','w')
+	gg = open('./files/'+rank+'_'+clade+'_feature_correlation.txt','w')
 	for x in sorted_rs:
 		gg.write(x)
 		gg.write('\t')
