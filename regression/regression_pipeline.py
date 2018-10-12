@@ -7,7 +7,7 @@ logger.addHandler(handler)
 from sys import argv
 from sys import version
 import genome_to_species as feature_average
-import feature_regression_parallel as feature_regression
+import feature_regression
 import multi_lin_regression
 import random
 import feature_assignment_venn as venn
