@@ -98,7 +98,7 @@ def rs(features,species_features,species_OGTs,rank,clade,valid_species,unit):
 	p.join()
 	'''
 	#run single thread if getting glyph error
-	results = [r_calc(x) for x in feature_list]
+	results = list(map(r_calc,feature_list))
 	#write out the feature correlation
 	feature_rs ={x[0]:x[1] for x in results if not(x[1] == None)}
 	sorted_rs = reversed(sorted(feature_rs, key=lambda dict_key: abs(feature_rs[dict_key])))
