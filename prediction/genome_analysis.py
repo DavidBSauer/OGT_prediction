@@ -12,7 +12,6 @@ import rRNA
 import operator
 import random
 import os
-from tqdm import tqdm
 
 species_clade = {}
 def setup(sc_input):
@@ -86,9 +85,7 @@ def many_genomes(genomes):
 	p.join()
 	'''
 	#calculate single thread for troubleshooting
-	results =[]
-	for x in tqdm(to_analyze,unit='genome'):
-		results.append(features_per_genome(x))
+	results =list(map(features_per_genome,to_analyze))
 	'''
 	results = {x[0]:x[1] for x in results}
 	

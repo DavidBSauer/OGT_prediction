@@ -108,7 +108,10 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				results = p.map(train,test_features)
 				p.close()
 				p.join()
-
+				'''
+				#single thread for testing
+				results = list(map(train,test_features))
+				'''
 				#find the best new regression
 				best_return = results[0]
 				for x in results[1:]:

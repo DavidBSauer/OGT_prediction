@@ -117,9 +117,7 @@ p.close()
 p.join()
 '''
 #single thread for trouble shooting
-results =[]
-for x in to_analyze:
-	results.append(features_per_genome(x))
+results = list(map(features_per_genome,to_analyze))
 '''
 results = {x[0]:x[1] for x in results}
 

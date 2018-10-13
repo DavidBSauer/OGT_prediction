@@ -45,7 +45,10 @@ def calc(rvalues,all_features,species_features,feature_order,clade):
 	results = p.map(cc,pairs)
 	p.close()
 	p.join()
-	
+	'''
+	#single thread for testing
+	results = list(map(cc,pairs))
+	'''	
 	#create a 2D dictionary of absolute r-values
 	for (feature1,feature2,r_value) in results:
 		pairwise[feature1][feature2]=r_value
