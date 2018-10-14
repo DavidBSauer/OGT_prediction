@@ -61,10 +61,9 @@ def GC(N_counts):
 	total = sum(N_counts.values())
 	return (N_counts['G']+N_counts['C'])/total
 
-def t_size(data):
+def t_size(N_counts):
 	#calculate the total size of the genome
-	total = sum(N_counts.values())
-	return total
+	return sum(N_counts.values())
 	
 def j2(data):
 	#calculate the J2 metric of the genome
