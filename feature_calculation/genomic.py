@@ -1,6 +1,4 @@
 from Bio import SeqIO
-import logging
-logger = logging.getLogger('feature_calculation')
 
 def analysis(inputs):
 	#calculate all genomic features of the genome
@@ -8,10 +6,11 @@ def analysis(inputs):
 	folder = '_'.join(genome_file.split('.')[:-1])
 	data = SeqIO.index('./output/genomes/'+species+'/'+folder+'/'+genome_file,'fasta')
 	results ={}
-	results['Nucleotide Fraction']=nucleotide_freq(data)
+	N_counts = counter(data)
+	results['Nucleotide Fraction']=nucleotide_freq(N_counts)
 	results['Dinucleotide Fraction']=dinucleotide_freq(data)
-	results['GC']=GC(data)
-	results['Total Size']=t_size(data)
+	results['GC']=GC(N_counts)
+	results['Total Size']=t_size(N_counts)
 	results['J2']=j2(data)
 	results2 = {}
 	for key in results.keys():
@@ -22,8 +21,8 @@ def analysis(inputs):
 			results2[key] = results[key]
 	return results2
 
-def nucleotide_freq(data):
-	#calculate the nucleotide fraction for each nucleotide in the genome
+def counter(data):
+	#count the nucleotide in the genome
 	#ignore Ns
 	A=0.0
 	G=0.0
@@ -35,8 +34,12 @@ def nucleotide_freq(data):
 		G = G+float(input_seq.count('G'))
 		T = T+float(input_seq.count('T'))
 		C = C+float(input_seq.count('C'))
-	total = A+G+T+C
-	return {'A':A/total,'C':C/total,'G':G/total,'T':T/total}
+	return {'A':A,'G':G,'T':T,'C':C}
+
+def nucleotide_freq(N_counts):
+	#calculate the nucleotide fraction for each nucleotide in the genome
+	total = sum(N_counts.values())
+	return {'A':N_counts['A']/total,'C':N_counts['C']/total,'G':N_counts['G']/total,'T':N_counts['T']/total}
 
 def dinucleotide_freq(data):
 	#calculate the dinucleotide frequencies of the genome
@@ -53,36 +56,14 @@ def dinucleotide_freq(data):
 		total = total + counts[x]
 	return {x:counts[x]/total for x in keys}
 
-def GC(data):
+def GC(N_counts):
 	#calculate the GC fraction of the genome
-	#ignore Ns
-	A=0.0
-	G=0.0
-	T=0.0
-	C=0.0
-	for x in data:
-		input_seq = data[x].seq
-		A = A+float(input_seq.count('A'))
-		G = G+float(input_seq.count('G'))
-		T = T+float(input_seq.count('T'))
-		C = C+float(input_seq.count('C'))
-	total = A+G+T+C
-	return (G+C)/total
+	total = sum(N_counts.values())
+	return (N_counts['G']+N_counts['C'])/total
 
 def t_size(data):
 	#calculate the total size of the genome
-	#ignore Ns
-	A=0.0
-	G=0.0
-	T=0.0
-	C=0.0
-	for x in data:
-		input_seq = data[x].seq
-		A = A+float(input_seq.count('A'))
-		G = G+float(input_seq.count('G'))
-		T = T+float(input_seq.count('T'))
-		C = C+float(input_seq.count('C'))
-	total = A+G+T+C
+	total = sum(N_counts.values())
 	return total
 	
 def j2(data):

@@ -1,11 +1,9 @@
-import logging
-logger = logging.getLogger('feature_calculation')
-
 def analysis(data):
 	#calculate all rRNA features
 	results ={}
-	results['Nucleotide Fraction']=nucleotide_freq(data)
-	results['GC']=GC(data)
+	N_counts = counter(data)
+	results['Nucleotide Fraction']=nucleotide_freq(N_counts)
+	results['GC']=GC(N_counts)
 	results2 = {}
 	for key in results.keys():
 		if isinstance(results[key],dict):
@@ -15,39 +13,27 @@ def analysis(data):
 			results2[key] = results[key]
 	return results2
 
-def nucleotide_freq(data):
-	#calculate nucleotide fractions of the rRNA sequences
+def counter(data):
+	#count the nucleotide in the genome
 	#ignore Ns
-	#as this is read from the genome, count T's rather than U's
 	A=0.0
 	G=0.0
 	T=0.0
 	C=0.0
 	for x in data:
-		input_seq = data[x]
-		input_seq = input_seq.seq
+		input_seq = data[x].seq
 		A = A+float(input_seq.count('A'))
 		G = G+float(input_seq.count('G'))
 		T = T+float(input_seq.count('T'))
 		C = C+float(input_seq.count('C'))
-	total = A+G+T+C
-	return {'A':A/total,'C':C/total,'G':G/total,'T':T/total}
-	
+	return {'A':A,'G':G,'T':T,'C':C}
 
-def GC(data):
-	#calculate the GC fraction of the rRNA sequences
-	#ignore Ns
-	#as this is read from the genome, count T's rather than U's
-	A=0.0
-	G=0.0
-	T=0.0
-	C=0.0
-	for x in data:
-		input_seq = data[x]
-		input_seq = input_seq.seq
-		A = A+float(input_seq.count('A'))
-		G = G+float(input_seq.count('G'))
-		T = T+float(input_seq.count('T'))
-		C = C+float(input_seq.count('C'))
-	total = A+G+T+C
-	return (G+C)/total
+def GC(N_counts):
+	#calculate the GC fraction
+	total = sum(N_counts.values())
+	return (N_counts['G']+N_counts['C'])/total
+	
+def nucleotide_freq(N_counts):
+	#calculate the nucleotide fraction
+	total = sum(N_counts.values())
+	return {'A':N_counts['A']/total,'C':N_counts['C']/total,'G':N_counts['G']/total,'T':N_counts['T']/total}
