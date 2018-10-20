@@ -41,7 +41,7 @@ def calc(genome_species,species_trait,species_clade,unit):
 	
 	#create histogram
 	all_buckets = {q:0 for q in range(min_bound,max_bound,step_size)}
-	for clade in ['all','Bacteria','Archaea']:
+	for clade in ['all_species','Bacteria','Archaea']:
 		g = open('./files/histogram_'+clade+'.txt','w')
 		buckets = {q:0 for q in range(min_bound,max_bound,step_size)}
 		for species in all_species:

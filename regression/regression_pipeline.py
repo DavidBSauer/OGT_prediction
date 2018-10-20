@@ -59,11 +59,11 @@ for line in infile.readlines():
 infile.close()
 for level in levels:
 	logger.info("for rank of "+level+" found "+str(len(species_rank_dicts[level].keys()))+" taxonomic groups")
-species_rank_dicts['superkingdom']['all']=list(set(all_species))
+species_rank_dicts['superkingdom']['all_species']=list(set(all_species))
 #remove empty taxons
 for rank in species_rank_dicts.keys():
 	species_rank_dicts[rank].pop('', None)
-logger.info("found "+str(len(species_rank_dicts['superkingdom']['all']))+" total species with taxonomic assignment")
+logger.info("found "+str(len(species_rank_dicts['superkingdom']['all_species']))+" total species with taxonomic assignment")
 	
 #parse/create train-test file
 train_test_valid = {}
@@ -106,7 +106,7 @@ analysis_sets = [['genomic'],['genomic','tRNA'],['genomic','rRNA'],['genomic','t
 #calculate regression for all superkingdoms
 
 logger.info('Calculate multiple linear regression of all data')
-for clade in ['all']:
+for clade in ['all_species']:
 	rank ='superkingdom'
 	#calculate rs
 	logger.info('Calculate feature r-values to OGT for domain: '+clade)
@@ -144,7 +144,7 @@ for clade in ['Archaea','Bacteria']:
 	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 #calculate regression for species with OGT>25
-for clade in ['all','Archaea','Bacteria']:
+for clade in ['all_species','Archaea','Bacteria']:
 	rank = 'greater_than_25C'
 	#calculate rs
 	logger.info('Calculate feature r-values to OGT for species with OGT>25C of domain: '+clade)
