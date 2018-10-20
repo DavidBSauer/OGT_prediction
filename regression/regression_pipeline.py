@@ -121,12 +121,6 @@ for clade in ['all']:
 		logger.info('Running multiple linear regression for '+clade+' species and feature sets of '+'+'.join(analysis))
 		multi_lin_regression.regress(rank+'-'+clade+'-'+'+'.join(analysis),species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
-	#limit OGT range to species with OGT >= 25C
-	analysis = analysis_sets[-1]
-	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
-	valid_species = [species for species in species_rank_dicts[rank][clade] if species_OGT[species]>25]	
-	multi_lin_regression.regress(rank+'-'+clade+'-all_features_>25',valid_species,analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
-
 	#exclude genome size
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
@@ -144,16 +138,23 @@ for clade in ['Archaea','Bacteria']:
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
 	multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
-	#limit OGT range to species with OGT >= 25C
-	analysis = analysis_sets[-1]
-	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
-	valid_species = [species for species in species_rank_dicts[rank][clade] if species_OGT[species]>25]	
-	multi_lin_regression.regress(rank+'-'+clade+'-all_features_>25',valid_species,analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
-
 	#exclude genome size
 	logger.info('Running multiple linear regression for '+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
 	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+
+#calculate regression for species with OGT>25
+for clade in ['all','Archaea','Bacteria']:
+	rank = 'greater_than_25C'
+	#calculate rs
+	logger.info('Calculate feature r-values to OGT for species with OGT>25C of domain: '+clade)
+	valid_species = [species for species in species_rank_dicts['superkingdom'][clade] if species_OGT[species]>25]
+	rvalues = feature_regression.rs(features,species_features,species_OGT,rank,clade,valid_species,unit)
+
+	#for specific superkingdoms, calculate regression using all features classes
+	analysis = analysis_sets[-1]
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features',valid_species,analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 #run regression by clade
 for rank in [level for level in species_rank_dicts.keys() if not(level == 'superkingdom')]:
@@ -167,4 +168,5 @@ for rank in [level for level in species_rank_dicts.keys() if not(level == 'super
 				analysis = analysis_sets[-1] #calculate regression using all features
 				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
 				multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+
 logger.info('Exiting normally')		
