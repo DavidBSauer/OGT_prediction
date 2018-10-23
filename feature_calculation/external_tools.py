@@ -31,7 +31,7 @@ def versions():
 	p = subprocess.Popen([commands['barrnap']+' --version'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	logger.info('barrnap version info: '+err.decode('utf-8').strip())
-	p = subprocess.Popen([commands['prodigal']+' --v'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	p = subprocess.Popen([commands['prodigal']+' -v'],shell=True,executable='/bin/bash',stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	out,err = p.communicate()
 	logger.info('prodigal version info: '+out.decode('utf-8').strip())
 	logger.info('Numpy version: '+np.__version__)
