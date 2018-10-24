@@ -50,12 +50,13 @@ def train(inputs):
 	regr = linear_model.LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
 	regr.fit(training_feature_values, training_OGTs)
 	predicts = regr.predict(training_feature_values)
-	RMSE = math.sqrt(np.mean((predicts - training_OGTs) ** 2))
+	MSE = np.mean((predicts - training_OGTs) ** 2)
+	RMSE = math.sqrt(MSE)
 	r2 = r2_score(training_OGTs,predicts)
 	p = float(len(features))
 	n = float(training_OGTs.shape[0])
 	adj_r2 = 1-((1-r2)*(n-1)/(n-p-1))
-	return {'features':features,'RMSE':RMSE,'regr':regr,'adj_r2':adj_r2}
+	return {'features':features,'RMSE':RMSE,'regr':regr,'adj_r2':adj_r2,'MSE':MSE}
 
 def regress(title,species_to_test,analysis,features,species_features,species_OGTs,train_test_valid,rvalues,unit):
 	#build list of features to use, if it is in the analysis type, has a calculated r-value, and the r-value is >= 0.3
@@ -83,18 +84,20 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			current_features = best_return['features']
 			current_adj_r2 = best_return['adj_r2']
 			current_RMSE = best_return['RMSE']
+			current_MSE = best_return['MSE'
 			current_model = best_return['regr']
 		
 			#dummy value for the first round of the run
-			current_adj_r2 = 0
+			current_MSE = float('inf')
 
 			#while the model improves, keep adding features
 			#run as long as model improves (via r value), it is not overdetermined, and there are features to add
-			while (best_return['adj_r2'] > current_adj_r2) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
+			while (best_return['MSE'] < current_MSE) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
 				#replace current values with new bests
 				current_features = best_return['features']
 				current_adj_r2 = best_return['adj_r2']
 				current_RMSE = best_return['RMSE']
+				current_MSE = best_return['MSE']
 				current_model = best_return['regr']
 
 				#build list of possible feature combinations, starting from previous best
@@ -115,14 +118,15 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				#find the best new regression
 				best_return = results[0]
 				for x in results[1:]:
-					if x['adj_r2'] > best_return['adj_r2']:
+					if x['MSE'] < best_return['MSE']:
 						best_return = x
 
 			#catch in case exiting loop for reason other than unimproved regression
-			if best_return['adj_r2']> current_adj_r2:
+			if best_return['MSE'] < current_MSE:
 				current_features = best_return['features']
 				current_adj_r2 = best_return['adj_r2']
 				current_RMSE = best_return['RMSE']
+				current_MSE = best_return['MSE']
 				current_model = best_return['regr']			
 
 			coefs ={}
