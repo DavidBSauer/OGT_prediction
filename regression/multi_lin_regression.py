@@ -51,12 +51,7 @@ def train(inputs):
 	regr.fit(training_feature_values, training_OGTs)
 	predicts = regr.predict(training_feature_values)
 	MSE = np.mean((predicts - training_OGTs) ** 2)
-	RMSE = math.sqrt(MSE)
-	r2 = r2_score(training_OGTs,predicts)
-	p = float(len(features))
-	n = float(training_OGTs.shape[0])
-	adj_r2 = 1-((1-r2)*(n-1)/(n-p-1))
-	return {'features':features,'RMSE':RMSE,'regr':regr,'adj_r2':adj_r2,'MSE':MSE}
+	return {'features':features,'regr':regr,'MSE':MSE}
 
 def regress(title,species_to_test,analysis,features,species_features,species_OGTs,train_test_valid,rvalues,unit):
 	#build list of features to use, if it is in the analysis type, has a calculated r-value, and the r-value is >= 0.3
@@ -82,8 +77,6 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			#run a first round with the single most correlated feature
 			best_return = train(([seed_feature],species_features,species_OGTs,training_species))
 			current_features = best_return['features']
-			current_adj_r2 = best_return['adj_r2']
-			current_RMSE = best_return['RMSE']
 			current_MSE = best_return['MSE'
 			current_model = best_return['regr']
 		
@@ -95,8 +88,6 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			while (best_return['MSE'] < current_MSE) and (len(current_features)+1 < len(all_features)) and (len(current_features)+1 < len(training_species)):
 				#replace current values with new bests
 				current_features = best_return['features']
-				current_adj_r2 = best_return['adj_r2']
-				current_RMSE = best_return['RMSE']
 				current_MSE = best_return['MSE']
 				current_model = best_return['regr']
 
@@ -124,8 +115,6 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			#catch in case exiting loop for reason other than unimproved regression
 			if best_return['MSE'] < current_MSE:
 				current_features = best_return['features']
-				current_adj_r2 = best_return['adj_r2']
-				current_RMSE = best_return['RMSE']
 				current_MSE = best_return['MSE']
 				current_model = best_return['regr']			
 
