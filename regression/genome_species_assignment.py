@@ -39,7 +39,7 @@ for species in species_taxon_lists.keys():
 	species_taxon[species] = assignment
 logger.info('Number of species with an assigned taxon: '+str(len(species_taxon.keys())))
 
-f = open('barrnap_species_assignment.txt','w')
+f = open('barrnap_species_taxonomic.txt','w')
 f.write('species\tsuperkingdom\n')
 for species in species_taxon.keys():
 	f.write(species+'\t'+species_taxon[species]+'\n')
