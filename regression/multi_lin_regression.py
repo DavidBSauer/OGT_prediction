@@ -77,7 +77,7 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			#run a first round with the single most correlated feature
 			best_return = train(([seed_feature],species_features,species_OGTs,training_species))
 			current_features = best_return['features']
-			current_MSE = best_return['MSE'
+			current_MSE = best_return['MSE']
 			current_model = best_return['regr']
 		
 			#dummy value for the first round of the run
