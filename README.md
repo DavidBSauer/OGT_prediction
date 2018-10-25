@@ -39,7 +39,7 @@ python3 genome_species_assignment.py genomes_retrieved.txt Genome_barrnap_assign
 ```
 1. Calculate correlation of features to OGT and multiple linear regression models.
 ```
-python3 regression_pipeline.py species_trait_file training_testing_file species_taxonomic.txt Genome-feature_files
+python3 regression_pipeline.py species_trait_file training_testing_file species_taxonomic_file Genome-feature_files
 ```
 training_testing_file is a tab separated file of species annotated as either "train" or "test". For the first run, using NONE will automatically assign 20% of the species to a test set and generate this file for future use.
 
