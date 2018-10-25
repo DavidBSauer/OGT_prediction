@@ -20,7 +20,7 @@ Calculate features for each genome
 ```
 python3 genome_retriever.py list_of_species_file IN
 ```
-Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
+list_of_species_file needs to have one species per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
 
 2. Download taxonomic classification for species of interest.
 ```
@@ -33,10 +33,15 @@ python3 feature_calculation_pipeline.py genomes_retrieved.txt species_taxonomic.
 This will produce a series of files with the features for each genome. The feature files will be titled "Genome_XXX_features.txt" where XXX is the feature class (genomic, tRNA, rRNA, ORF, protein).
 
 ### Regression
+(optional) 0. Only when predicting a genome's taxonomy using barrnap identified 16S rRNA sequences, generate a species_taxonomic.txt.
+```
+python3 genome_species_assignment.py genomes_retrieved.txt Genome_barrnap_assignment.txt
+```
 1. Calculate correlation of features to OGT and multiple linear regression models.
 ```
 python3 regression_pipeline.py species_trait_file training_testing_file species_taxonomic_file Genome-feature_files
 ```
+training_testing_file is a tab separated file of species annotated as either "train" or "test". For the first run, using NONE will automatically assign 20% of the species to a test set and generate this file for future use.
 
 ### Prediction
 Predict the OGT of a species (or many species) using the generated multiple linear regression models.
