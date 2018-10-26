@@ -1,6 +1,5 @@
-genomic Dinucleotide Fraction: CT	133.8101158733725
-protein AA: S	-291.92503306146057
-protein AA: H	688.3948191213963
-ORF Stop Codon: TAG	-24.465215610083646
-genomic Dinucleotide Fraction: AG	-288.8642002876449
-intercept	41.99091891817757
+genomic Dinucleotide Fraction: CT	-116.30975564603999
+protein AA: S	-274.61574315312134
+protein AA: H	741.9450215042941
+ORF Stop Codon: TAG	-24.92109484633535
+intercept	37.591103877546104

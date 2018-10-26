@@ -1,18 +1,8 @@
-protein Polar-Uncharged	-109.64824925890726
-rRNA GC	-80551595775442.7
-genomic Dinucleotide Fraction: CT	295.2802734375
-ORF Start Codon: TTG	-63.91015625
-rRNA Nucleotide Fraction: T	181224932535876.56
-protein AA: Y	520.1739501953125
-ORF Codon: AAG	-90.05859375
-protein AA: C	-509.023681640625
-genomic Dinucleotide Fraction: AG	110.11328125
-ORF Codon: TGC	386.336181640625
-ORF Dinucleotide Fraction: CT	-72.939453125
-protein Polar_Charged	-3.453125
-ORF Codon: CGA	-35.27978515625
-rRNA Nucleotide Fraction: A	181224932535454.72
-rRNA Nucleotide Fraction: C	261776528311262.25
-protein AA: S	-9.7666015625
-rRNA Nucleotide Fraction: G	261776528311266.88
-intercept	-181224932535705.44
+protein Polar-Uncharged	-140.2010691780734
+rRNA GC	333.1455576210476
+genomic Dinucleotide Fraction: CT	292.10313467854866
+ORF Start Codon: TTG	-62.13427484758829
+rRNA Nucleotide Fraction: T	380.57853145085693
+protein AA: Y	496.80028045710816
+ORF Codon: AAG	-68.65323414983555
+intercept	-220.33379934838217
