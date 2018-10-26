@@ -53,9 +53,9 @@ training_testing_file is a list of species annotated as either "train" or "test"
 
 ### Prediction
 Predict the OGT of a species (or many species) using the generated multiple linear regression models.
-1. Download genomes for species NOT IN a provided list.
+1. Download genomes for species IN or NOT_IN a provided list.
 ```
-python3 genome_retriever.py list_of_species_file NOT_IN
+python3 genome_retriever.py list_of_species_file IN/NOT_IN
 ```
 Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore).
 
@@ -68,3 +68,26 @@ python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 python3 prediction_pipeline.py regression_model_directory/ genomes_retrieved.txt species_taxonomic.txt
 ```
 note: Models for the same taxon in the regression model directory should be cleaned-up so all taxa models are non-redundant prior to use. Each model file should be named rank-taxon-xxx. Each model file is a list features-coefficients pairs, tab separated.
+
+##Prediction Demonstration
+This uses te previously computed regression models.
+1. Go to the prediction directory.
+```
+cd prediction
+```
+
+2. Download genomes species IN the provided list.
+```
+python3 genome_retriever.py ../data/prediction_demo/species.txt IN
+```
+
+3. Download taxonomic classification for species.
+```
+python3 clade_retriever.py ../data/prediction_demo/species.txt your_email_address@awesome.com
+```
+
+4. Run the prediction script to predict the OGT of each species.
+```
+python3 prediction_pipeline.py ../data/prediction_demo/regression_models/ genomes_retrieved.txt species_taxonomic.txt
+```
+

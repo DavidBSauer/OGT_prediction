@@ -1,0 +1,6 @@
+methanolobus_psychrophilus
+acinetobacter_proteolyticus
+acinetobacter_bohemicus
+xanthomonas_cannabis
+agrobacterium_fabrum
+
