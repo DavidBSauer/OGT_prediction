@@ -34,6 +34,7 @@ list_of_species_file needs to have one species per line, with the species name t
 ```
 python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 ```
+
 3. Calculate feature for each species of interest.
 ```
 python3 feature_calculation_pipeline.py genomes_retrieved.txt species_taxonomic.txt
@@ -45,6 +46,7 @@ This will produce a series of files with the features for each genome. The featu
 ```
 python3 genome_species_assignment.py genomes_retrieved.txt Genome_barrnap_assignment.txt
 ```
+
 1. Calculate correlation of features to OGT and multiple linear regression models.
 ```
 python3 regression_pipeline.py species_trait_file training_testing_file species_taxonomic_file Genome-feature_files
@@ -53,6 +55,7 @@ training_testing_file is a list of species annotated as either "train" or "test"
 
 ### Prediction
 Predict the OGT of a species (or many species) using the generated multiple linear regression models.
+
 1. Download genomes for species IN or NOT_IN a provided list.
 ```
 python3 genome_retriever.py list_of_species_file IN/NOT_IN
@@ -63,14 +66,18 @@ Species file needs to have one per line, with the species name the first thing o
 ```
 python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 ```
+
 3. Run the prediction script to predict the OGT of each species.
 ```
 python3 prediction_pipeline.py regression_model_directory/ genomes_retrieved.txt species_taxonomic.txt
 ```
 note: Models for the same taxon in the regression model directory should be cleaned-up so all taxa models are non-redundant prior to use. Each model file should be named rank-taxon-xxx. Each model file is a list features-coefficients pairs, tab separated.
 
-##Prediction Demonstration
-This uses te previously computed regression models.
+The final result will be in the file newly_predicted_OGTs.txt, listing each species, the predicted OGT, and the taxonomic model used for the prediction.
+
+## Prediction Demonstration
+This uses the previously computed regression models to predict OGTs for a few species. 
+
 1. Go to the prediction directory.
 ```
 cd prediction
@@ -90,4 +97,4 @@ python3 clade_retriever.py ../data/prediction_demo/species.txt your_email_addres
 ```
 python3 prediction_pipeline.py ../data/prediction_demo/regression_models/ genomes_retrieved.txt species_taxonomic.txt
 ```
-
+The final result will be in the file newly_predicted_OGTs.txt, listing each species, the predicted OGT, and the taxonomic model used for the prediction. (Note, these results are not deterministic as the genomes available for each species may change.)
