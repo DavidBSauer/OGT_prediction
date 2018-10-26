@@ -58,7 +58,7 @@ echo "install python packages"
 sudo pip3 install numpy scipy matplotlib biopython bcbio-gff tqdm sklearn matplotlib matplotlib-venn
 
 #move external_tools.txt
-cp external_tools.txt ./feature_calculation/external_tools.txt
-cp external_tools.txt ./prediction/external_tools.txt
+cp ../external_tools.txt ../feature_calculation/external_tools.txt
+cp ../external_tools.txt ../prediction/external_tools.txt
 
 echo "finished"
