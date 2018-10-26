@@ -15,7 +15,7 @@ git clone https://github.com/DavidBSauer/OGT_prediction
 These scripts depend upon the programs: Python3, tRNAscan-SE, Bedtools, Barrnap, and Prodigal. These have their own dependencies also.
 And uses the python packages: numpy, scipy, matplotlib, biopython, bcbio-gff, tqdm, sklearn, matplotlib, and matplotlib-venn.
 
-To install everything in Ubuntu (or other system that use the apt package manager) use the pre-made bash script. 
+To install everything in Ubuntu (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script. 
 ```
 ./Ubuntu_setup.bash
 ```
@@ -23,7 +23,8 @@ If you're on another OS, install all the python packages. Then install bedtools,
 
 ## Usage
 ### Feature Calculation
-Calculate features for each genome.
+Calculate features for each genome. Start within the feature_calculation directory.
+
 1. Download genomes for species IN a provided list.
 ```
 python3 genome_retriever.py list_of_species_file IN
@@ -42,6 +43,8 @@ python3 feature_calculation_pipeline.py genomes_retrieved.txt species_taxonomic.
 This will produce a series of files with the features for each genome. The feature files will be titled "Genome_XXX_features.txt" where XXX is the feature class (genomic, tRNA, rRNA, ORF, protein).
 
 ### Regression
+Start within the regression directory.
+
 (optional) 0. Only when predicting a genome's taxonomy using barrnap identified 16S rRNA sequences, generate barrnap_species_taxonomic.txt.
 ```
 python3 genome_species_assignment.py genomes_retrieved.txt Genome_barrnap_assignment.txt
@@ -54,7 +57,7 @@ python3 regression_pipeline.py species_trait_file training_testing_file species_
 training_testing_file is a list of species annotated as either "train" or "test", tab separated. For the first run, using NONE will automatically assign 20% of the species to a test set and generate this file for future use.
 
 ### Prediction
-Predict the OGT of a species (or many species) using the generated multiple linear regression models.
+Predict the OGT of a species (or many species) using the generated multiple linear regression models. Start within the prediction directory.
 
 1. Download genomes for species IN or NOT_IN a provided list.
 ```
@@ -76,24 +79,19 @@ note: Models for the same taxon in the regression model directory should be clea
 The final result will be in the file newly_predicted_OGTs.txt, listing each species, the predicted OGT, and the taxonomic model used for the prediction.
 
 ## Prediction Demonstration
-This uses the previously computed regression models to predict OGTs for a few species. 
+This uses the previously computed regression models to predict OGTs for a few species. Start within the prediction directory.
 
-1. Go to the prediction directory.
-```
-cd prediction
-```
-
-2. Download genomes species IN the provided list.
+1. Download genomes species IN the provided list.
 ```
 python3 genome_retriever.py ../data/prediction_demo/species.txt IN
 ```
 
-3. Download taxonomic classification for species.
+2. Download taxonomic classification for species.
 ```
 python3 clade_retriever.py ../data/prediction_demo/species.txt your_email_address@awesome.com
 ```
 
-4. Run the prediction script to predict the OGT of each species.
+3. Run the prediction script to predict the OGT of each species.
 ```
 python3 prediction_pipeline.py ../data/prediction_demo/regression_models/ genomes_retrieved.txt species_taxonomic.txt
 ```
