@@ -13,7 +13,7 @@ git clone https://github.com/DavidBSauer/OGT_prediction
 
 2. Install the requirements.
 These scripts depend upon the programs: Python3, tRNAscan-SE, Bedtools, Barrnap, and Prodigal. These have their own dependencies also.
-And uses the python packages: numpy, scipy, matplotlib, biopython, bcbio-gff, tqdm, sklearn, matplotlib, and matplotlib-venn.
+The following python packages also need to be installed: numpy, scipy, matplotlib, biopython, bcbio-gff, tqdm, sklearn, matplotlib, and matplotlib-venn.
 
 To install everything in Ubuntu (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script. 
 ```
