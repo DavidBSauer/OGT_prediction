@@ -41,7 +41,7 @@ python3 genome_species_assignment.py genomes_retrieved.txt Genome_barrnap_assign
 ```
 python3 regression_pipeline.py species_trait_file training_testing_file species_taxonomic_file Genome-feature_files
 ```
-training_testing_file is a tab separated file of species annotated as either "train" or "test". For the first run, using NONE will automatically assign 20% of the species to a test set and generate this file for future use.
+training_testing_file is a list of species annotated as either "train" or "test", tab separated. For the first run, using NONE will automatically assign 20% of the species to a test set and generate this file for future use.
 
 ### Prediction
 Predict the OGT of a species (or many species) using the generated multiple linear regression models.
@@ -59,4 +59,4 @@ python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 ```
 python3 prediction_pipeline.py regression_model_directory/ genomes_retrieved.txt species_taxonomic.txt
 ```
-note: Models for the same taxon in the regression model directory should be cleaned-up so all taxa models are non-redundant prior to use.
+note: Models for the same taxon in the regression model directory should be cleaned-up so all taxa models are non-redundant prior to use. Each model file should be named rank-taxon-xxx. Each model file is a list features-coefficients pairs, tab separated.
