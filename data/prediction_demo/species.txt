@@ -1,6 +1,8 @@
-methanolobus_psychrophilus
-acinetobacter_proteolyticus
-acinetobacter_bohemicus
-xanthomonas_cannabis
-agrobacterium_fabrum
-
+thermococcus_celericrescens
+labrenzia_alexandrii
+thermanaerovibrio_acidaminovorans
+desulfotomaculum_kuznetsovii
+thermosulfidibacter_takaii
+lactobacillus_collinoides
+thermocrinis_ruber
+geobacillus_thermoglucosidasius
