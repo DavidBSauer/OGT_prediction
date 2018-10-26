@@ -3,19 +3,27 @@ Scripts for calculating features from genomic sequences, multiple linear regress
 
 See: Sauer & Wang. Prediction of Optimal Growth Temperature using only Genome Derived Features (2018) https://doi.org/10.1101/273094
 
-## Requirements
-Requires: Python3, BioPython, Numpy, SciPy, Sklearn, MatPlotLib, MatPlotLib-Venn, BCBio-GFF, tqdm, tRNAscan-SE, Bedtools, Barrnap, Prodigal.
+## Installation and Requirements
+This has been developed and tested on Ubuntu 18.04 LTS. The scripts should work on any system supporting Python 3, so long as the external programs are installed properly.
 
-In practice, there is a bash script "Ubuntu_setup.bash" that will install everything.
+1. Download these scripts. This is easiest using git to clone the repository.
+```
+git clone https://github.com/DavidBSauer/OGT_prediction
+```
 
-Run as: 
+2. Install the requirements.
+These scripts depend upon the programs: Python3, tRNAscan-SE, Bedtools, Barrnap, and Prodigal. These have their own dependencies also.
+And uses the python packages: numpy, scipy, matplotlib, biopython, bcbio-gff, tqdm, sklearn, matplotlib, and matplotlib-venn.
+
+To install everything in Ubuntu (or other system that use the apt package manager) use the pre-made bash script. 
 ```
 ./Ubuntu_setup.bash
 ```
+If you're on another OS, install all the python packages. Then install bedtools, tRNAscan-SE, barrnap, and prodigal; and all their dependencies. Create a file called external_tools.txt listing bedtools, tRNAscan-SE, barrnap, and prodigal tab separated from the absolute path for each executable. Copy this external_tools.txt file into the feature_calculation and prediction directories.
 
 ## Usage
 ### Feature Calculation
-Calculate features for each genome
+Calculate features for each genome.
 1. Download genomes for species IN a provided list.
 ```
 python3 genome_retriever.py list_of_species_file IN
