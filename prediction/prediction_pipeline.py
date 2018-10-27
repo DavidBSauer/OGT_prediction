@@ -20,6 +20,8 @@ species_taxonomy = argv[3]
 logger.info('the directory of OGT regression models: '+regression_model_directory)
 logger.info('the file of genomic sequences to predict: '+genome_file)
 logger.info('file of taxonomy for each genome: '+species_taxonomy)
+r2_limit = 0.5
+logger.info('only using regression models with an R2 >= '+str(r2_limit))
 
 #load regression models
 models = {}
@@ -29,10 +31,14 @@ for model_file in files:
 	if not(rank in models.keys()):
 		models[rank]={}
 	clade = model_file.split('-')[1]
+	models[rank][clade] = {}
 	logger.info('reading in the '+rank+'-'+clade+' linear regression model file: '+regression_model_directory+model_file)
 	f = open(regression_model_directory+model_file,'r')
-	models[rank][clade] = {line.split('\t')[0].strip():float(line.split('\t')[1].strip()) for line in f.readlines()}
-	f.close()		
+	lines = f.readlines()
+	f.close()
+	models[rank][clade]['R2']=float(lines[0].split('|')[0].split('=')[1])
+	models[rank][clade]['model'] = {line.split('\t')[0].strip():float(line.split('\t')[1].strip()) for line in lines[1:]}
+	
 
 #build a dictionary of taxonomic information
 taxonomic_info={}
@@ -76,23 +82,27 @@ newly_predicted_OGTs = {}
 print('calculating OGTs')
 for species in tqdm(species_features.keys(),unit='species'):
 	for rank in ['domain','superkingdom','phylum','class','order','family']: #will continually overwrite the value with a progressively more taxon specific prediction
-		if rank in list(taxonomic_info[species].keys()):
+		if ((rank in list(taxonomic_info[species].keys())) and (rank in models.keys())):
 			if taxonomic_info[species][rank] in list(models[rank].keys()):
-				logger.info('testing '+species+' against the model '+rank+'-'+taxonomic_info[species][rank])
-				regress_features = models[rank][taxonomic_info[species][rank]].keys()
-				regress_features_less = [feature for feature in regress_features if not(feature == 'intercept')]
-				if set(regress_features_less).issubset(set(species_features[species].keys())):
-					logger.info(species+' has all the features for this model. predicting OGT')
-					newly_predicted_OGTs[species]={}
-					pred_ogt = []
-					for feature in regress_features_less:
-						pred_ogt.append(models[rank][taxonomic_info[species][rank]][feature]*species_features[species][feature])
-					pred_ogt.append(models[rank][taxonomic_info[species][rank]]['intercept'])
-					pred_ogt = sum(pred_ogt)
-					newly_predicted_OGTs[species]['OGT'] = pred_ogt
-					newly_predicted_OGTs[species]['model'] = rank+'-'+taxonomic_info[species][rank]
-				else:
-					logger.info(species+' does not have the features necessary for this model.')
+				if models[rank][taxonomic_info[species][rank]]['R2'] >= r2_limit:
+					#logger.info('Testing '+species+' against the model '+rank+'-'+taxonomic_info[species][rank])
+					regress_features = models[rank][taxonomic_info[species][rank]]['model'].keys()
+					regress_features_less = [feature for feature in regress_features if not(feature == 'intercept')]
+					if set(regress_features_less).issubset(set(species_features[species].keys())):
+						logger.info(species+' has all the features for the model '+rank+'-'+taxonomic_info[species][rank]+'. predicting OGT')
+						newly_predicted_OGTs[species]={}
+						pred_ogt = []
+						for feature in regress_features_less:
+							pred_ogt.append(models[rank][taxonomic_info[species][rank]]['model'][feature]*species_features[species][feature])
+						pred_ogt.append(models[rank][taxonomic_info[species][rank]]['model']['intercept'])
+						pred_ogt = sum(pred_ogt)
+						newly_predicted_OGTs[species]['OGT'] = pred_ogt
+						newly_predicted_OGTs[species]['model'] = rank+'-'+taxonomic_info[species][rank]
+					#else:
+						#logger.info(species+' does not have all the features to use the model '+rank+'-'+taxonomic_info[species][rank])
+				#else:
+					#logger.info('While the model '+rank+'-'+taxonomic_info[species][rank]+' is specific to '+species+', the R2 of the model is < 0.5. Therefore skipping this model.')
+
 
 
 g = open('newly_predicted_OGTs.txt','w')

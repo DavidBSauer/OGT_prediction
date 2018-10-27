@@ -122,14 +122,8 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 				current_adj_r2 = best_return['adj_r2']
 				current_model = best_return['regr']			
 
-			coefs ={}
-			g = open('./files/regression_models/'+title+'.txt','w')
-			for x in range(0,len(current_features),1):
-				coefs[current_features[x]] = current_model.coef_[x]
-				g.write(current_features[x]+'\t'+str(current_model.coef_[x])+'\n')
-			g.write('intercept\t'+str(current_model.intercept_)+'\n')
+			coefs ={current_features[x]:current_model.coef_[x] for x in range(0,len(current_features),1)}
 			coefs['intercept']=current_model.intercept_
-			g.close()
 			
 			#create a list of coefficients
 			regress_features = coefs.keys()
@@ -204,3 +198,11 @@ def regress(title,species_to_test,analysis,features,species_features,species_OGT
 			plt.cla()
 			plt.clf()
 			plt.close()
+
+			g = open('./files/regression_models/'+title+'.txt','w')
+			g.write('#R2='+str(test_r2)+'|RMSE='+str(test_RMSE)+'\n')
+			for x in range(0,len(current_features),1):
+				g.write(current_features[x]+'\t'+str(current_model.coef_[x])+'\n')
+			g.write('intercept\t'+str(current_model.intercept_)+'\n')
+			g.close()
+
