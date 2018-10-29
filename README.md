@@ -22,7 +22,7 @@ cd OGT_prediction
 ```
 If you're on another OS, install all the python packages. Then install bedtools, tRNAscan-SE, barrnap, and prodigal; and all their dependencies. Create a file called external_tools.txt listing bedtools, tRNAscan-SE, barrnap, and prodigal tab separated from the absolute path for each executable. Copy this external_tools.txt file into the feature_calculation and prediction directories.
 
-## Prediction Demonstration
+## Demonstration
 This uses the previously computed regression models to predict OGTs for a few species. Start within the prediction directory.
 
 0. Move into the prediction directory.
