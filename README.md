@@ -17,12 +17,18 @@ The following python packages also need to be installed: numpy, scipy, matplotli
 
 To install everything in Ubuntu (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script. 
 ```
+cd OGT_prediction
 ./Ubuntu_setup.bash
 ```
 If you're on another OS, install all the python packages. Then install bedtools, tRNAscan-SE, barrnap, and prodigal; and all their dependencies. Create a file called external_tools.txt listing bedtools, tRNAscan-SE, barrnap, and prodigal tab separated from the absolute path for each executable. Copy this external_tools.txt file into the feature_calculation and prediction directories.
 
 ## Prediction Demonstration
 This uses the previously computed regression models to predict OGTs for a few species. Start within the prediction directory.
+
+0. Move into the prediction directory.
+```
+cd prediction
+```
 
 1. Download genomes species IN the provided list.
 ```
