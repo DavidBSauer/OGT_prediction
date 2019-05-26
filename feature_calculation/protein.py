@@ -10,6 +10,7 @@ def analysis(inputs):
 	results['Polar-Uncharged']=percent_polar_uncharged(AA_counts)
 	results['Thermolabile']=percent_thermolabile(AA_counts)		
 	results['EK_QH']=EKQH(AA_counts)
+	results['EK_QT']=EKQT(AA_counts)
 	results['EFMR']=EFMR(AA_counts)
 	results['Polar_Charged']=polar_charged(AA_counts)
 	results['Polar_Hydrophobic']=polar_hydrophobic(AA_counts)
@@ -83,6 +84,16 @@ def percent_thermolabile(AA_counts):
 def EKQH(AA_counts):
 	#calculate the ratio of EK/QH in the proteome
 	EK = 0.0
+	QH=0.0
+	for x in ['E','K']:	
+		EK=EK+AA_counts[x]
+	for x in ['Q','H']:
+		QH=QH+AA_counts[x]
+	return EK/QH
+
+def EKQT(AA_counts):
+	#calculate the ratio of EK/QH in the proteome
+	EK = 0.0
 	QT=0.0
 	for x in ['E','K']:	
 		EK=EK+AA_counts[x]
@@ -124,8 +135,6 @@ def percent_ERK(AA_counts):
 	counts= sum(AA_counts.values())
 	for x in ['E','R','K']:	
 		ERK=ERK+AA_counts[x]
-	for x in AAs:
-		counts=counts+AA_counts[x]
 	return ERK/counts
 	
 def LKQ(AA_counts):
