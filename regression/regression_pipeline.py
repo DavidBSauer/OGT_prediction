@@ -102,7 +102,7 @@ histogram.calc(genome_species,species_OGT,species_rank_dicts,unit)
 logger.info('Calculate data venn diagram')
 venn.calc(species_features,species_OGT,species_rank_dicts)
 
-analysis_sets = [['genomic'],['genomic','tRNA'],['genomic','rRNA'],['genomic','tRNA','rRNA'],['genomic','tRNA','rRNA','ORF'],['genomic','tRNA','rRNA','ORF','protein']]
+analysis_sets = [['genomic'],['genomic','tRNA'],['genomic','rRNA'],['genomic','tRNA','rRNA'],['genomic','tRNA','rRNA','ORF'],['genomic','rRNA','ORF','protein'],['genomic','tRNA','ORF','protein'],['genomic','ORF','protein'],['genomic','tRNA','rRNA','ORF','protein']]
 #calculate regression for all superkingdoms
 
 logger.info('Calculate multiple linear regression of all data')
@@ -125,6 +125,13 @@ for clade in ['all_species']:
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
 	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and rRNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size_and_rRNA',species_rank_dicts[rank][clade],['genomic','tRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and tRNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size_and_tRNA',species_rank_dicts[rank][clade],['genomic','rRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and all RNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size_and_all_RNA',species_rank_dicts[rank][clade],['genomic','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+
 
 logger.info('Calculate multiple linear regression of superkingdom specific data')
 for clade in ['Archaea','Bacteria']:
@@ -142,6 +149,12 @@ for clade in ['Archaea','Bacteria']:
 	logger.info('Running multiple linear regression for '+clade+' species excluding genome size')
 	del rvalues['genomic Total Size']
 	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and rRNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size_and_rRNA',species_rank_dicts[rank][clade],['genomic','tRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and tRNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size_and_tRNA',species_rank_dicts[rank][clade],['genomic','rRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and all RNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_genome_size_and_RNA',species_rank_dicts[rank][clade],['genomic','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 #calculate regression for species with OGT>25
 for clade in ['all_species','Archaea','Bacteria']:
@@ -155,6 +168,12 @@ for clade in ['all_species','Archaea','Bacteria']:
 	analysis = analysis_sets[-1]
 	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species with OGT >25C')
 	multi_lin_regression.regress(rank+'-'+clade+'-all_features',valid_species,analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and rRNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_rRNA',valid_species,['genomic','tRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and tRNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_tRNA',valid_species,['genomic','rRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+	logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and all RNA')
+	multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_RNA',valid_species,['genomic','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 #run regression by clade
 for rank in [level for level in species_rank_dicts.keys() if not(level == 'superkingdom')]:
@@ -168,5 +187,11 @@ for rank in [level for level in species_rank_dicts.keys() if not(level == 'super
 				analysis = analysis_sets[-1] #calculate regression using all features
 				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species and feature sets of '+'+'.join(analysis))
 				multi_lin_regression.regress(rank+'-'+clade+'-all_features',species_rank_dicts[rank][clade],analysis,features,species_features,species_OGT,train_test_valid,rvalues,unit)
+				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and rRNA')
+				multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_rRNA',species_rank_dicts[rank][clade],['genomic','tRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and tRNA')
+				multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_tRNA',species_rank_dicts[rank][clade],['genomic','rRNA','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
+				logger.info('Running multiple linear regression for '+rank+'-'+clade+' species excluding genome size and all RNA')
+				multi_lin_regression.regress(rank+'-'+clade+'-all_features_ex_RNA',species_rank_dicts[rank][clade],['genomic','ORF','protein'],features,species_features,species_OGT,train_test_valid,rvalues,unit)
 
 logger.info('Exiting normally')		
