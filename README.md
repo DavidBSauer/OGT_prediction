@@ -23,7 +23,7 @@ cd OGT_prediction
 If you're on another OS, install all the python packages. Then install bedtools, tRNAscan-SE, barrnap, and prodigal; and all their dependencies. Create a file called external_tools.txt listing bedtools, tRNAscan-SE, barrnap, and prodigal tab separated from the absolute path for each executable. Copy this external_tools.txt file into the feature_calculation and prediction directories.
 
 ### OGT Data
-To calculate regressions, a species_trait file (tab delimited) is required. The species_OGT file used for calculating regression in  Sauer & Wang (2019) and found here, was originally published in Sauer et al. (2015). The species_OGT file is named "all_merged_12_10_2012.txt" and found within http://www.med.nyu.edu/skirball-lab/dwanglab/files/thermostability_v1.1.tar.gz. If new regression are calcuated using that species-OGT file, please cite: Sauer et al. Rapid Bioinformatic Identification of Thermostabilizing Mutations. Biophysical Journal (2015) https://doi.org/10.1016/j.bpj.2015.07.026.
+To calculate regressions, a species_trait file (tab delimited) is required. The species_OGT file used for calculating regression in Sauer & Wang (2019) was originally published in Sauer et al. (2015). The species_OGT file is named "all_merged_12_10_2012.txt" and found within http://www.med.nyu.edu/skirball-lab/dwanglab/files/thermostability_v1.1.tar.gz. If new regressions are calcuated using that species-OGT file, please cite: Sauer et al. Rapid Bioinformatic Identification of Thermostabilizing Mutations. Biophysical Journal (2015) https://doi.org/10.1016/j.bpj.2015.07.026.
 
 ## Demonstration
 This uses the previously computed regression models to predict OGTs for a few species. Start within the prediction directory.
