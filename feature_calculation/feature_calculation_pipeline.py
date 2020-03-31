@@ -33,14 +33,20 @@ logger.info("found "+str(len(species_clade.keys()))+" species with taxonomic inf
 #read in the genomes file. save a dict of genome->species
 logger.info("trying to open genomes file")
 infile = open(genome_species_file,'r')
-reader = csv.reader(infile,delimiter='\t')
-genomes = dict((str(rows[0]),str(rows[1])) for rows in reader)
+genomes = {}
+for line in infile.readlines():
+	species = line.split('\t')[1].strip()
+	genome = line.split('\t')[0].strip()
+	if species in genomes.keys():
+		genomes[species].append(genome)
+	else:
+		genomes[species]=[genome]
 infile.close()    
-logger.info("found "+str(len(genomes.keys()))+" genomes")
+logger.info("found "+str(sum([len(y) for y in genomes.values()]))+" genomes")
 
 #only analyze those with taxonomic description, shuffle
-genomes = {x:genomes[x] for x in genomes.keys() if genomes[x] in species_clade.keys()}
-to_analyze = [(x,genomes[x]) for x in genomes.keys()]
+genomes = {species:genomes[species] for species in genomes.keys() if species in species_clade.keys()}
+to_analyze = [(genome,species) for species in genomes.keys() for genome in genomes[species]]
 random.shuffle(to_analyze)
 
 #make folders for output
@@ -107,7 +113,7 @@ def features_per_genome(inputs):
 		
 	external_tools.cleanup((genome_file,species))
 	
-	return (genome_file,result)
+	return (species+'/'+genome_file,result)
 	
 #calculate features in parallel
 

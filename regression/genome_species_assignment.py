@@ -12,7 +12,7 @@ logger.info('Genome-species file: '+species_genome_file)
 logger.info('Genome-barrnap assignment file: '+genome_assignment_file)
 
 f = open(species_genome_file,'r')
-genome_species = {'.'.join(line.strip().split('\t')[0].split('.')[:-1]):line.strip().split('\t')[1] for line in f.readlines()}
+genome_species = {line.strip().split('\t')[1]+'/'+'.'.join(line.strip().split('\t')[0].split('.')[:-1]):line.strip().split('\t')[1] for line in f.readlines()}
 f.close()
 logger.info('Number of genomes with an assigned species: '+str(len(genome_species.keys())))
 

@@ -61,10 +61,10 @@ def features_per_genome(inputs):
 		
 	external_tools.cleanup((genome_file,species))
 	
-	return (genome_file,result)
+	return (species+'/'+genome_file,result)
 
 def many_genomes(genomes):
-	to_analyze = [(genome,genomes[genome]) for genome in genomes]
+	to_analyze = [(genome,species) for species in genomes.keys() for genome in genomes[species]]
 	random.shuffle(to_analyze)
 	print('analyzing genomes')
 	#make folders for output
