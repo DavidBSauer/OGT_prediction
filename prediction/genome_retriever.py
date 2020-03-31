@@ -1,6 +1,4 @@
-#retrieve genomes from ensembl using ensembl's rest API
-##note: Ensembl release 40 does not have checksums (?)
-
+import urllib
 from urllib.request import urlopen
 import time
 import sys
@@ -10,10 +8,11 @@ from tqdm import tqdm
 import requests
 logging.basicConfig(filename=str('genome_retriever.log'), level=logging.INFO)
 
-ref_file, setting = sys.argv[1:3]
+ref_file, setting, release = sys.argv[1:4]
 
 logging.info('Reference file: '+ref_file)
 logging.info('Setting: '+setting)
+logging.info('Using Ensembl release: '+release) #the paper used release 40 but this allow for accessing updated releases
 
 if not(setting in ['IN','NOT_IN']):
 	print("Setting must be 'IN' or 'NOT_IN'. Quitting")
@@ -40,32 +39,39 @@ logging.info('found '+str(len(properly_formed))+' properly formed species names'
 print('finding all valid genomes')
   
 addresses = {}
-retrieve_all= "http://rest.ensemblgenomes.org/info/genomes/division/EnsemblBacteria?"
-r = requests.get(retrieve_all, headers={ "Content-Type" : "application/json"})
-if not r.ok:
-	logging.info('could not open the json page')
+root ="ftp://ftp.ensemblgenomes.org/pub/bacteria/release-"+release
+retrieve_all= root+"/species_EnsemblBacteria.txt"
+try:
+	response = urllib.request.urlopen(retrieve_all)
+	data = response.read()
+	decoded = data.decode('utf-8').split('\n')
+except:
+	logging.info('could not open the Ensembl bacteria ftp list')
 else:
-	decoded = r.json()
-	for x in decoded:
-		if len(x['species'].split('_'))>=2:
-			species ='_'.join(x['species'].split('_')[0:2]).lower()
-			(genus,species_name) = species.split('_')
-			if not(genus in ['','candidate','uncultured','unidentified','synthetic','candidatus','bacterium','marine']) and not(species_name in ['sp','group','candidatus','bacterium','proteobacterium','endosymbiont','archaeon','cluster','producing','gamma']):
-				if not 'bacterium' in species_name:
-					if setting == 'IN':
-						if species in properly_formed:
-							root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
-							collection = '_'.join(x['dbname'].split('_')[0:3])
-							full_name = x['species']
-							directory = root_address+collection+'/'+full_name+'/dna/'
-							addresses[directory]=species
-					else:
-						if not(species in properly_formed):
-							root_address ='ftp://ftp.ensemblgenomes.org/pub/bacteria/release-40/fasta/'
-							collection = '_'.join(x['dbname'].split('_')[0:3])
-							full_name = x['species']
-							directory = root_address+collection+'/'+full_name+'/dna/'
-							addresses[directory]=species
+	first_line= decoded[0].split('\t')
+	for line in decoded[1:]:
+		if not(line.strip() == ''):
+			working =line.split('\t')
+			x={first_line[pos]:working[pos] for pos in range(0,len(first_line),1)}
+			if len(x['species'].split('_'))>=2:
+				species ='_'.join(x['species'].split('_')[0:2]).lower()
+				(genus,species_name) = species.split('_')
+				if not(genus in ['','candidate','uncultured','unidentified','synthetic','candidatus','bacterium','marine']) and not(species_name in ['sp','group','candidatus','bacterium','proteobacterium','endosymbiont','archaeon','cluster','producing','gamma']):
+					if not 'bacterium' in species_name:
+						if setting == 'IN':
+							if species in properly_formed:
+								root_address =root+'/fasta/'
+								collection = '_'.join(x['core_db'].split('_')[0:3])
+								full_name = x['species']
+								directory = root_address+collection+'/'+full_name+'/dna/'
+								addresses[directory]=species
+						else:
+							if not(species in properly_formed):
+								root_address =root+'/fasta/'
+								collection = '_'.join(x['core_db'].split('_')[0:3])
+								full_name = x['species']
+								directory = root_address+collection+'/'+full_name+'/dna/'
+								addresses[directory]=species
 
 logging.info('Number of genomes to retrieve: '+str(len(addresses.keys())))
 logging.info('Number of species to retrieve: '+str(len(list(set(addresses.values())))))
