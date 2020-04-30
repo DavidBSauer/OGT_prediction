@@ -23,6 +23,18 @@ note: Models for the same taxon in the regression model directory should be clea
 
 The final result will be in the file newly_predicted_OGTs.txt, listing each species, the predicted OGT, and the taxonomic model used for the prediction.
 
+##Demo
+A small demonstration set of species is included. Run each step as below.
+
+```
+python3 genome_retriever.py ../data/prediction_demo/species.txt IN 40
+python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
+python3 prediction_pipeline.py ../data/prediction_demo/regression_models/ genomes_retrieved.txt species_taxonomic.txt
+```
+
+The results should match the predicted values in ../data/prediction_demo/example_predictions.txt
+
+
 ## Notes
 If you are running on your genomes not available for download: 
 1. Place each genome in a folder in the prediction directory called "genomes/XXX/" where XXX is the name of the species. The species names are unimportant for this regression and can be placeholders. However, remember that features from the same species are averaged prior to OGT prediction.

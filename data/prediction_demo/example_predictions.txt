@@ -1,0 +1,7 @@
+geobacillus_thermoglucosidasius	43.77017854234397	class-Bacilli
+labrenzia_alexandrii	25.08490706205427	superkingdom-Bacteria
+thermosulfidibacter_takaii	68.17655997599613	superkingdom-Bacteria
+thermocrinis_ruber	78.5705860098106	superkingdom-Bacteria
+desulfotomaculum_kuznetsovii	57.43954180719663	order-Clostridiales
+lactobacillus_collinoides	29.482739412855274	class-Bacilli
+thermanaerovibrio_acidaminovorans	48.89494553287278	superkingdom-Bacteria
