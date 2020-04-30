@@ -7,7 +7,7 @@ Calculate features for each genome. Start within the feature_calculation directo
 
 1. Download genomes for species IN a provided list.
 ```
-python3 genome_retriever.py list_of_species_file IN
+python3 genome_retriever.py list_of_species_file IN release
 ```
 list_of_species_file needs to have one species per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore). The release is the release number of Ensembl Bacteria to use. Release 40 was used for Sauer & Wang (2019).
 

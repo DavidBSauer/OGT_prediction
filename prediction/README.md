@@ -6,7 +6,7 @@ Predict the OGT of a species (or many species) using the generated multiple line
 
 1. Download genomes for species IN or NOT_IN a provided list.
 ```
-python3 genome_retriever.py list_of_species_file IN/NOT_IN
+python3 genome_retriever.py list_of_species_file IN/NOT_IN release
 ```
 Species file needs to have one per line, with the species name the first thing on the line, where the species name has the form "genus_species" (all lower case, separated by an underscore). The release is the release number of Ensembl Bacteria to use. Release 40 was used for Sauer & Wang (2019).
 
