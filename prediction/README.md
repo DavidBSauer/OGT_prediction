@@ -23,7 +23,7 @@ note: Models for the same taxon in the regression model directory should be clea
 
 The final result will be in the file newly_predicted_OGTs.txt, listing each species, the predicted OGT, and the taxonomic model used for the prediction.
 
-##Demo
+## Demo
 A small demonstration set of species is included. Run each step as below.
 
 ```
