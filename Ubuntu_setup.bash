@@ -6,11 +6,12 @@
 mkdir External_tools
 cd External_tools
 
-#install tRNAscan-SE 
+#install tRNAscan-SE
 echo "installing tRNAscan"
 sudo apt-get -y update
 sudo apt-get -y upgrade
-sudo apt-get -y install gcc make perl automake zlib1g-dev python hmmer python3 python3-dev python3-pip build-essential python3-tk g++
+sudo apt-get -y install gcc make perl automake zlib1g-dev python hmmer
+python3 python3-dev python3-pip build-essential python3-tk g++ zlib1g libjpeg-dev
 wget http://eddylab.org/infernal/infernal-1.1.2.tar.gz
 tar -zxvf infernal-1.1.2.tar.gz
 cd infernal-1.1.2
