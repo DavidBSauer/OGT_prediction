@@ -1,5 +1,5 @@
 # OGT_prediction
-Scripts for calculating features from genomic sequences, multiple linear regression of those features to the originating species' Optimal Growth Temperatures (OGT), and prediction of a species' OGT using those linear regression models. 
+Scripts for calculating features from genomic sequences, multiple linear regression of those features to the originating species' Optimal Growth Temperatures (OGT), and prediction of a species' OGT using those linear regression models.
 
 See: Sauer & Wang. Predicting the optimal growth temperatures of prokaryotes using only genome derived features. Bioinformatics (2019) https://doi.org/10.1093/bioinformatics/btz059
 
@@ -15,7 +15,7 @@ git clone https://github.com/DavidBSauer/OGT_prediction
 These scripts depend upon the programs: Python3, tRNAscan-SE, Bedtools, Barrnap, and Prodigal. These have their own dependencies also.
 The following python packages also need to be installed: numpy, scipy, matplotlib, biopython, bcbio-gff, tqdm, sklearn, matplotlib, and matplotlib-venn.
 
-To install everything in Ubuntu (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script. 
+To install everything in Ubuntu (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script.
 ```
 cd OGT_prediction
 ./Ubuntu_setup.bash
@@ -35,7 +35,7 @@ cd prediction
 
 1. Download genomes species IN the provided list.
 ```
-python3 genome_retriever.py ../data/prediction_demo/species.txt IN
+python3 genome_retriever.py ../data/prediction_demo/species.txt IN 40
 ```
 
 2. Download taxonomic classification for species.
