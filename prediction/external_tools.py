@@ -1,7 +1,6 @@
 import os
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_rna, generic_dna
 from Bio.Seq import Seq
 import shutil
 import numpy as np
@@ -61,7 +60,7 @@ def setup(inputs):
 	#uncompress genome
 	input_file = gzip.open('./genomes/'+species+'/'+genome_file,'r')
 	g = open('./output/genomes/'+species+'/'+folder+'/'+'.'.join(genome_file.split('.')[:-1]),'w')
-	for line in input_file:	
+	for line in input_file:
 		g.write(line.decode('ascii').upper())
 	g.close()
 	input_file.close()
@@ -98,8 +97,8 @@ def tRNA(inputs):
 			seqs =[]
 			for line in f.readlines():
 				if line.startswith('Seq:'):
-					new_seq = line.split()[1] 				
-					seqs.append(SeqRecord(Seq(str(new_seq),generic_rna),'tRNA_'+str(len(seqs)),'',''))
+					new_seq = line.split()[1]
+					seqs.append(SeqRecord(Seq(str(new_seq)),'tRNA_'+str(len(seqs)),'',''))
 			f.close()
 			SeqIO.write(seqs,'./output/genomes/'+species+'/'+folder+'/trnascan_result.fa','fasta')
 			return (True,SeqIO.index('./output/genomes/'+species+'/'+folder+'/trnascan_result.fa','fasta'))
@@ -113,7 +112,7 @@ def tRNA(inputs):
 
 #using prodigal ORFfinder
 def ORF(inputs):
-	(genome_file,species) = inputs	
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	global commands
 	command = commands['prodigal']+' -i ./output/genomes/'+species+'/'+folder+'/'+genome_file+' -d ./output/genomes/'+species+'/'+folder+'/mrna.fna -a ./output/genomes/'+species+'/'+folder+'/translated.faa -o ./output/genomes/'+species+'/'+folder+'/prodigal_output.gbk'
@@ -136,7 +135,7 @@ def ORF(inputs):
 		return (False,None)
 
 def proteins(inputs):
-	(genome_file,species) = inputs	
+	(genome_file,species) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
 	if os.path.isfile('./output/genomes/'+species+'/'+folder+'/translated.faa'):
 		if len(SeqIO.index('./output/genomes/'+species+'/'+folder+'/translated.faa','fasta'))>0:
@@ -179,7 +178,7 @@ def rRNA(inputs):
 		logger.info('error with barrnap archaea for '+genome_file+' with a message of\n'+err)
 		domain_results['Archaea'] = False
 	return domain_results
-	
+
 #classify based on rRNA sequences
 def classify(inputs):
 	(genome_file,species) = inputs
@@ -204,7 +203,7 @@ def classify(inputs):
 		return (False,None)
 
 
-#calculate rRNA sequences 
+#calculate rRNA sequences
 def rRNA_seq(inputs):
 	(genome_file,species,domain,method) = inputs
 	folder = '_'.join(genome_file.split('.')[:-1])
@@ -235,16 +234,15 @@ def rRNA_seq(inputs):
 				g.write(line)
 		f.close()
 		g.close()
-		
+
 		seqs = SeqIO.index('./output/genomes/'+species+'/'+folder+'/barrnap/barrnap_results_'+method+'_renamed.fa','fasta')
 		if len(seqs) >0:
 			return (True,seqs)
 		else:
-			#did not predict any rRNA	
+			#did not predict any rRNA
 			logger.info('did not predict any rRNA for '+genome_file)
 			return (False,None)
 	else:
 		#bedtools produced an error
 		logger.info('error in bedtools for '+genome_file+' with a message of\n'+err)
 		return (False,None)
-
