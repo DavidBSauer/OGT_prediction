@@ -32,11 +32,13 @@ python3 clade_retriever.py species_retrieved.txt your_email_address@awesome.com
 python3 prediction_pipeline.py ../data/prediction_demo/regression_models/ genomes_retrieved.txt species_taxonomic.txt
 ```
 
-The results should match the predicted values in ../data/prediction_demo/example_predictions.txt
-
+The results should roughly match the predicted values in ../data/prediction_demo/example_predictions.txt (Note, these results may not exactly match the previously predicted values as the genomes available for each species may change.)
 
 ## Notes
 If you are running on your genomes not available for download: 
 1. Place each genome in a folder in the prediction directory called "genomes/XXX/" where XXX is the name of the species. The species names are unimportant for this regression and can be placeholders. However, remember that features from the same species are averaged prior to OGT prediction.
 2. Create a tab separated file of the genomes and species pairs. Provide this file in place of genomes_retrieved.txt. 
 3. Create a file for the taxonomic classification of each species. The top line needs to be "species", then all ranks for which a species will be classified, tab separated. Each species should then be listed on a new line, followed by its classification, all tab separated. Provide this file in place of species_taxonomic.txt. 
+
+## Model notes
+In addition to regression models using all features, models have also been calculated excluding various feature classes (ie. tRNA, rRNA, all RNA, or genome size) which might be absent due to an incomplete organismal genome. These are stored within the subdirectories of ../data/calculations/prediction/regression_models/ . Therefore, be mindful of your particular particular prediction problem when selecting the regression model directory for the prediction calculation (step 3).
