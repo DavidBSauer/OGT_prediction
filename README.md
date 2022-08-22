@@ -48,3 +48,6 @@ python3 clade_retriever.py ../data/prediction_demo/species.txt your_email_addres
 python3 prediction_pipeline.py ../data/prediction_demo/regression_models/ genomes_retrieved.txt species_taxonomic.txt
 ```
 The final result will be in the file newly_predicted_OGTs.txt, listing each species, the predicted OGT, and the taxonomic model used for the prediction. (Note, these results are not deterministic as the genomes available for each species may change.)
+
+## Model notes
+In addition to regression models using all features, models have also been calculated excluding various feature classes (ie. tRNA, rRNA, all RNA, or genome size) which might be absent due to an incomplete organismal genome. These are stored within the subdirectories of data/calculations/prediction/regression_models/ . Therefore, be mindful of your particular particular prediction problem when selecting the regression model directory for the prediction calculation (step 3 above).
