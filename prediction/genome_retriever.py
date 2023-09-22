@@ -14,6 +14,13 @@ logging.info('Reference file: '+ref_file)
 logging.info('Setting: '+setting)
 logging.info('Using Ensembl release: '+release) #the paper used release 40 but this allow for accessing updated releases
 
+invalid_releases = ['50', '52', '53', '54', '55', '56']
+
+if release in invalid_reseases:
+	logging.info('Warning! Ensembl releases '+', '.join(invalid_releases)+' have malformed lists of genomes, causing this retrievier to fail. Quitting!')
+	print('Warning! Ensembl releases '+', '.join(invalid_releases)+' have malformed lists of genomes, causing this retrievier to fail. Quitting!')
+	sys.exit()
+
 if not(setting in ['IN','NOT_IN']):
 	print("Setting must be 'IN' or 'NOT_IN'. Quitting")
 	logging.info('Improper setting. Quitting')
@@ -30,14 +37,14 @@ infile.readline()
 for line in infile.readlines():
 	working = line.split()
 	if ((len(working)>0) and (not(working[0].strip() == ''))):
-		species_list.append(working[0].strip()) 
-infile.close()    
+		species_list.append(working[0].strip())
+infile.close()
 logging.info("found "+str(len(species_list))+" species")
 properly_formed = [species for species in species_list if (not(species[0]=='_') and not(species[-1]=='_') and not(species.split('_')[-1] == 'sp.') and len(species.split('_'))==2)]
 logging.info('found '+str(len(properly_formed))+' properly formed species names')
 
 print('finding all valid genomes')
-  
+
 addresses = {}
 root ="ftp://ftp.ensemblgenomes.org/pub/bacteria/release-"+release
 retrieve_all= root+"/species_EnsemblBacteria.txt"
@@ -89,8 +96,8 @@ def download_file(genome_addr,species):
 		if len(g_file)>0:
 			g_file = g_file[0]
 			if not os.path.exists('./genomes/'+species):
-				os.makedirs('./genomes/'+species) 
-			with urlopen(genome_addr+g_file, timeout=60) as response, open('./genomes/'+species+'/'+g_file,'wb') as f: 
+				os.makedirs('./genomes/'+species)
+			with urlopen(genome_addr+g_file, timeout=60) as response, open('./genomes/'+species+'/'+g_file,'wb') as f:
 				the_file = response.read()
 				f.write(the_file)
 				f.close()
