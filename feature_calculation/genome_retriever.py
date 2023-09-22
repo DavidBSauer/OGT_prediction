@@ -16,7 +16,7 @@ logging.info('Using Ensembl release: '+release) #the paper used release 40 but t
 
 invalid_releases = ['50', '52', '53', '54', '55', '56']
 
-if release in invalid_reseases:
+if release in invalid_releases:
 	logging.info('Error! Ensembl releases '+', '.join(invalid_releases)+' have malformed lists of genomes, causing this retrievier to fail. Quitting!')
 	print('Error! Ensembl releases '+', '.join(invalid_releases)+' have malformed lists of genomes, causing this retrievier to fail. Quitting!')
 	sys.exit()
