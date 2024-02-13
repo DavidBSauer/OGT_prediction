@@ -15,11 +15,18 @@ git clone https://github.com/DavidBSauer/OGT_prediction
 These scripts depend upon the programs: Python3, tRNAscan-SE, Bedtools, Barrnap, and Prodigal. These have their own dependencies also.
 The following python packages also need to be installed: numpy, scipy, matplotlib, biopython, bcbio-gff, tqdm, sklearn, matplotlib, and matplotlib-venn.
 
-To install everything in Ubuntu (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script.
+To install everything in Ubuntu 18 LTS (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script.
 ```
 cd OGT_prediction
 ./Ubuntu_setup.bash
 ```
+
+To install everything in Ubuntu 22 LTS (or other system that use the apt package manager), go into the downloaded directory and use the pre-made bash script.
+```
+cd OGT_prediction
+./Ubuntu_22_setup.bash
+```
+
 If you're on another OS, install all the python packages. Then install bedtools, tRNAscan-SE, barrnap, and prodigal; and all their dependencies. Create a file called external_tools.txt listing bedtools, tRNAscan-SE, barrnap, and prodigal tab separated from the absolute path for each executable. Copy this external_tools.txt file into the feature_calculation and prediction directories.
 
 ### OGT Data
